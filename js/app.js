@@ -24,14 +24,39 @@ function startTimer(duration, display) {
 
         if (--timer < 0) {
             clearInterval(tid);
-            bar.pause();
-            brick.pause();
+            game.gameOver("time");
         }
 
     }, 1000);
 }
 
+var Game = function()
+{
+    this.status = true;
+}
 
+Game.prototype.gameOver = function(type)
+{
+    if (type === "dead")
+    {
+        $('#message').html("Game Over");
+    }
+    else if (type === "time")
+    {
+        $('#message').html("Times up!");
+    }
+
+    this.status = false;
+    // bar.pause();
+    // brick.pause();
+}
+
+Game.prototype.restart = function()
+{
+
+
+
+}
 
 
 var Map = function(){
@@ -145,6 +170,13 @@ FallingBrick.prototype.collide = function() {
 
     map.colHeight[this.col] = map.colHeight[this.col] + 2;
 
+
+    if (map.colHeight[(Board.COL_NUM/2)-1] >= Board.ROW_NUM
+        || map.colHeight[(Board.COL_NUM/2)] >= Board.ROW_NUM
+        )
+    {
+        game.gameOver("dead");
+    }
 
     map.grid[this.col][map.colHeight[this.col]-2] = this.color[1]+1;
     map.grid[this.col][map.colHeight[this.col]-1] = this.color[0]+1;
@@ -543,6 +575,7 @@ Brick.prototype.handleInput = function(key) {
 // Main Function
 ////////////////////////////////////
 
+var game = new Game();
 var map = new Map();
 var brick = new Brick();
 var leftFallingBrick = new FallingBrick();
@@ -554,7 +587,7 @@ $(document).ready(function() {
   $('button').click(function() {
     $('#text1').html("click");
     jQuery(function ($) {
-    var fiveMinutes = 89,
+    var fiveMinutes = 10,
         display = $('#time');
     startTimer(fiveMinutes, display);
     });
