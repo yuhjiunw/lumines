@@ -71,28 +71,35 @@ FallingBrick.prototype.update = function(dt) {
 
     if(this.display === true)
     {
-        this.checkCollisionWithMap();
+
 
         // console.log(this.y);
         // console.log(this.speed);
         // console.log(this.col);
 
-        if (this.y > Board.BOARD_HEIGHT-Board.BLOCK_SIZE) {
-            this.y = Board.BOARD_HEIGHT-Board.BLOCK_SIZE;
+        if (this.y >= Board.BOARD_HEIGHT- 2 * Board.BLOCK_SIZE) {
+            this.y = Board.BOARD_HEIGHT- 2 * Board.BLOCK_SIZE;
+
             // this.speed = 0;
             // this.y = 200;
 
         } else {
             this.y = this.y + dt * this.speed;
             // this.y = 0;
+            // if(this.y )
+            // console.log(this.y);
         }
+        this.checkCollisionWithMap();
     }
+
+
 }
 
 FallingBrick.prototype.render = function() {
 
     if (this.display === true)
     {
+        console.log(this.y);
         if(this.color[0] === 0)
         {
             ctx.drawImage(Resources.get(this.sprite1), this.x, this.y);
@@ -126,6 +133,7 @@ FallingBrick.prototype.checkCollisionWithMap = function() {
     if ( totalHeight + mapHeight > Board.BOARD_HEIGHT)
     {
         // console.log("falling_brick_collide");
+        // this.speed = 0;
         this.collide();
     }
 }
@@ -267,7 +275,7 @@ FallingBrick.prototype.setMap = function(){
             }
         }
     }
-    console.log(map.grid[this.col]);
+    // console.log(map.grid[this.col]);
 }
 
 
@@ -337,10 +345,10 @@ Bar.prototype.checkCollisionWithBrick = function() {
 
 Bar.prototype.clearBrick = function() {
 
-    console.log(this.nextTarget);
+    // console.log(this.nextTarget);
     var currentCol = (this.nextTarget - 15) / Board.BLOCK_SIZE;
 
-    console.log(map.grid[currentCol]);
+    // console.log(map.grid[currentCol]);
 
     var fillIndex = 0;
     for (var i = 0; i< map.colHeight[currentCol]; i++)
