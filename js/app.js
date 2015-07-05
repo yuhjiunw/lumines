@@ -17,6 +17,7 @@ var BRICK_OFFSET = [[0,0],[0,Board.BLOCK_SIZE],[Board.BLOCK_SIZE,Board.BLOCK_SIZ
 
 // Timer for countdown
 function startTimer(duration, display) {
+    // clearInterval(game.tid);
     var timer = duration;
     var tid = setInterval(function () {
 
@@ -28,6 +29,8 @@ function startTimer(duration, display) {
         }
 
     }, 1000);
+    game.timerID = tid;
+
 }
 
 var Game = function()
@@ -53,8 +56,13 @@ Game.prototype.gameOver = function(type)
 
 Game.prototype.restart = function()
 {
-
-
+    clearInterval(game.timerID);
+    brick.returnToStart();
+    bar.returnToStart();
+    map.clear();
+    leftFallingBrick.clear();
+    rightFallingBrick.clear();
+    game.status = true;
 
 }
 
@@ -76,6 +84,21 @@ var Map = function(){
 
     this.fallingBrickNum = 0;
 
+}
+
+Map.prototype.clear = function(){
+
+    var iMax = Board.COL_NUM;
+    var jMax = Board.ROW_NUM;
+
+    for (i=0;i<iMax;i++) {
+        for (j=0;j<jMax;j++) {
+            this.grid[i][j]=0;
+        }
+    }
+
+    this.fallingBrickNum = 0;
+    this.colHeight = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 }
 
 var FallingBrick = function(){
@@ -124,7 +147,7 @@ FallingBrick.prototype.render = function() {
 
     if (this.display === true)
     {
-        console.log(this.y);
+        // console.log(this.y);
         if(this.color[0] === 0)
         {
             ctx.drawImage(Resources.get(this.sprite1), this.x, this.y);
@@ -310,6 +333,15 @@ FallingBrick.prototype.setMap = function(){
     // console.log(map.grid[this.col]);
 }
 
+FallingBrick.prototype.clear = function() {
+    this.display = false;
+    this.speed = 500;
+    this.x = 0;
+    this.y = 0;
+    this.color = [0,0];
+    this.col = -1;
+}
+
 
 
 var Bar = function(){
@@ -364,6 +396,15 @@ Bar.prototype.pause = function() {
     this.y = 0;
 
 }
+
+// Bar.prototype.clear = function() {
+
+//     this.speed = 0;
+//     this.x = 0;
+//     this.y = 0;
+// }
+
+
 
 Bar.prototype.checkCollisionWithBrick = function() {
     // console.log(this.x);
@@ -585,15 +626,21 @@ var bar = new Bar();
 
 $(document).ready(function() {
   $('button').click(function() {
-    $('#text1').html("click");
+
+    game.restart();
+
+    $('#text1').html("Click");
+    $('button').html("Restart");
+    $('#time').html("91");
+
     jQuery(function ($) {
-    var fiveMinutes = 10,
+    var fiveMinutes = 20,
         display = $('#time');
     startTimer(fiveMinutes, display);
     });
 
-    brick.returnToStart();
-    bar.returnToStart();
+    // brick.returnToStart();
+    // bar.returnToStart();
 
   });
 });
