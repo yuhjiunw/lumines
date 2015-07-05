@@ -36,6 +36,7 @@ function startTimer(duration, display) {
 var Game = function()
 {
     this.status = true;
+    this.score = 0;
 }
 
 Game.prototype.gameOver = function(type)
@@ -62,8 +63,15 @@ Game.prototype.restart = function()
     map.clear();
     leftFallingBrick.clear();
     rightFallingBrick.clear();
+    this.score = 0;
     game.status = true;
 
+}
+
+Game.prototype.updateScore = function(colscore)
+{
+    game.score  = game.score + colscore;
+    $("#score").html(game.score);
 }
 
 
@@ -73,12 +81,20 @@ var Map = function(){
 
     var iMax = 16;
     var jMax = 10;
+
     this.grid = new Array(16);
+    this.typeGrid = new Array(16);
+    this.scoreGrid = new Array(16);
 
     for (i=0;i<iMax;i++) {
         this.grid[i] = new Array(10);
+        this.typeGrid[i] = new Array(10);
+        this.scoreGrid[i] = new Array(10);
+
         for (j=0;j<jMax;j++) {
             this.grid[i][j]=0;
+            this.typeGrid[i][j]=0;
+            this.scoreGrid[i][j]=0;
         }
     }
 
@@ -94,6 +110,8 @@ Map.prototype.clear = function(){
     for (i=0;i<iMax;i++) {
         for (j=0;j<jMax;j++) {
             this.grid[i][j]=0;
+            this.typeGrid[i][j]=0;
+            this.scoreGrid[i][j]=0;
         }
     }
 
@@ -210,8 +228,8 @@ FallingBrick.prototype.collide = function() {
 
     map.grid[this.col][map.colHeight[this.col]-2] = this.color[1]+1;
     map.grid[this.col][map.colHeight[this.col]-1] = this.color[0]+1;
-
     this.setMap();
+
     this.display = false;
     this.x = -100;
     this.y = -100;
@@ -258,6 +276,8 @@ FallingBrick.prototype.setMap = function(){
             map.grid[midx][midy] = newColor;
             map.grid[midx-1][midy] = newColor;
             map.grid[midx][midy+1] = newColor;
+            map.scoreGrid[midx][midy+1] = 1;
+
         }
 
         if (midy>0)
@@ -283,6 +303,8 @@ FallingBrick.prototype.setMap = function(){
                 map.grid[midx][midy] = newColor;
                 map.grid[midx-1][midy] = newColor;
                 map.grid[midx][midy-1] = newColor;
+
+                map.scoreGrid[midx][midy] = 1;
             }
         }
     }
@@ -310,6 +332,8 @@ FallingBrick.prototype.setMap = function(){
             map.grid[midx][midy] = newColor;
             map.grid[midx+1][midy] = newColor;
             map.grid[midx][midy+1] = newColor;
+
+            map.scoreGrid[midx+1][midy+1] = 1;
         }
 
         if (midy>0)
@@ -334,6 +358,8 @@ FallingBrick.prototype.setMap = function(){
                 map.grid[midx][midy] = newColor;
                 map.grid[midx+1][midy] = newColor;
                 map.grid[midx][midy-1] = newColor;
+
+                map.scoreGrid[midx+1][midy] = 1;
             }
         }
     }
@@ -445,8 +471,17 @@ Bar.prototype.clearBrick = function() {
         map.grid[currentCol][i] = 0;
     }
 
-    map.colHeight[currentCol] = fillIndex;
 
+
+    var colscore = 0;
+    for(var i = 0; i< map.colHeight[currentCol]; i++)
+    {
+        colscore = colscore + map.scoreGrid[currentCol][i];
+        map.scoreGrid[currentCol][i] = 0;
+    }
+
+    game.updateScore(colscore);
+    map.colHeight[currentCol] = fillIndex;
 }
 
 
