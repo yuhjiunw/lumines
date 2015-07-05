@@ -119,6 +119,32 @@ Map.prototype.clear = function(){
     this.colHeight = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 }
 
+
+//input right bottom coordinate
+Map.prototype.checkBrick = function(checkX, checkY){
+
+    if (checkY === Board.ROW_NUM)
+    {
+        return false;
+    }
+
+    if (checkX === 0)
+    {
+        return false;
+    }
+
+
+    if( map.grid[checkX][checkY] == map.grid[checkX][checkY+1]
+        && map.grid[checkX][checkY] == map.grid[checkX-1][checkY]
+        && map.grid[checkX][checkY] == map.grid[checkX-1][checkY+1]
+        )
+    {
+        return true;
+    }
+
+    return false;
+}
+
 var FallingBrick = function(){
 
     this.sprite1 = "images/purple.png";
@@ -481,7 +507,40 @@ Bar.prototype.clearBrick = function() {
     }
 
     game.updateScore(colscore);
+    bar.updateGrid(currentCol);
+
     map.colHeight[currentCol] = fillIndex;
+}
+
+Bar.prototype.updateGrid = function (currentCol){
+
+    if (currentCol === 1)
+    {
+        for(var i = 0; i< map.colHeight[currentCol-1]; i++)
+        {
+            if (map.grid[currentCol-1][i] > 2)
+            {
+                map.grid[currentCol-1][i] = map.grid[currentCol-1][i] - 2;
+            }
+        }
+    }
+    else if ( currentCol >= 2)
+    {
+        for(var i = 0; i< map.colHeight[currentCol-1]; i++)
+        {
+            if (map.grid[currentCol-1][i] > 2)
+            {
+                if( map.checkBrick(currentCol-1,i))
+                {
+                    i++;
+                }
+                else
+                {
+                    map.grid[currentCol-1][i] = map.grid[currentCol-1][i] - 2;
+                }
+            }
+        }
+    }
 }
 
 
@@ -676,7 +735,7 @@ $(document).ready(function() {
     $('#time').html("91");
 
     jQuery(function ($) {
-    var fiveMinutes = 30,
+    var fiveMinutes = 90,
         display = $('#time');
     startTimer(fiveMinutes, display);
     });
