@@ -147,7 +147,7 @@ FallingBrick.prototype.render = function() {
 
     if (this.display === true)
     {
-        // console.log(this.y);
+        console.log(this.y);
         if(this.color[0] === 0)
         {
             ctx.drawImage(Resources.get(this.sprite1), this.x, this.y);
@@ -178,7 +178,9 @@ FallingBrick.prototype.checkCollisionWithMap = function() {
 
     // console.log(totalHeight);
     // console.log(mapHeight);
-    if ( totalHeight + mapHeight > Board.BOARD_HEIGHT)
+    // console.log(this.y);
+
+    if ( totalHeight + mapHeight >= Board.BOARD_HEIGHT)
     {
         // console.log("falling_brick_collide");
         // this.speed = 0;
@@ -548,7 +550,7 @@ Brick.prototype.checkCollisionWithMap = function() {
     var mapHeightRight = map.colHeight[this.col+1] * Board.BLOCK_SIZE;
     if ( totalHeight + mapHeightLeft > Board.BOARD_HEIGHT || totalHeight + mapHeightRight > Board.BOARD_HEIGHT )
     {
-        // console.log("collide");
+        console.log("collide");
         this.collide();
     }
 }
