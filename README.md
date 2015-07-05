@@ -3,7 +3,7 @@
 ##### Install
 
 ```
-npm install express
+npm install express mongodb body-parser
 ```
 
 ##### Usage
@@ -11,5 +11,9 @@ npm install express
 ```
 node server.js
 ```
-[http://localhost:3000](http://locathost:3000/)
+Connect to [http://localhost:3000](http://locathost:3000/)
+```
+mongo
+$ db.lumines_score.find()
+```
 

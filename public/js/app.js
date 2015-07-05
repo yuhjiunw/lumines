@@ -14,6 +14,7 @@ var Board = {
 
 var BRICK_OFFSET = [[0,0],[0,Board.BLOCK_SIZE],[Board.BLOCK_SIZE,Board.BLOCK_SIZE], [Board.BLOCK_SIZE,0]];
 
+var xmlhttp = new XMLHttpRequest();
 
 // Timer for countdown
 function startTimer(duration, display) {
@@ -47,6 +48,9 @@ Game.prototype.gameOver = function(type)
     }
 
     this.status = false;
+
+    save_to_db(10);
+
     // bar.pause();
     // brick.pause();
 }
@@ -57,7 +61,6 @@ Game.prototype.restart = function()
 
 
 }
-
 
 var Map = function(){
 
@@ -613,3 +616,12 @@ document.addEventListener('keyup', function(e) {
 
     brick.handleInput(allowedKeys[e.keyCode]);
 });
+
+// Database
+
+var save_to_db = function(score) {
+    console.log("save_to_db");
+    xmlhttp.open("POST", "http://localhost:3000/save", true);
+    xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+    xmlhttp.send("score=" + score);
+}
