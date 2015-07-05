@@ -48,7 +48,7 @@ Game.prototype.gameOver = function(type)
     {
         $('#message').html("Times up!");
     }
-
+    clearInterval(game.timerID);
     this.status = false;
     // bar.pause();
     // brick.pause();
@@ -147,7 +147,7 @@ FallingBrick.prototype.render = function() {
 
     if (this.display === true)
     {
-        console.log(this.y);
+        // console.log(this.y);
         if(this.color[0] === 0)
         {
             ctx.drawImage(Resources.get(this.sprite1), this.x, this.y);
@@ -193,8 +193,13 @@ FallingBrick.prototype.collide = function() {
     map.fallingBrickNum = map.fallingBrickNum - 1;
     // console.log(map.fallingBrickNum);
 
-    map.colHeight[this.col] = map.colHeight[this.col] + 2;
+    console.log(map.colHeight[this.col]);
+    if(map.colHeight[this.col] >= Board.ROW_NUM -1)
+    {
+        game.gameOver("dead");
+    }
 
+    map.colHeight[this.col] = map.colHeight[this.col] + 2;
 
     if (map.colHeight[(Board.COL_NUM/2)-1] >= Board.ROW_NUM
         || map.colHeight[(Board.COL_NUM/2)] >= Board.ROW_NUM
@@ -636,7 +641,7 @@ $(document).ready(function() {
     $('#time').html("91");
 
     jQuery(function ($) {
-    var fiveMinutes = 20,
+    var fiveMinutes = 30,
         display = $('#time');
     startTimer(fiveMinutes, display);
     });
