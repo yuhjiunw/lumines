@@ -1,7 +1,11 @@
 html
   head
-    title Hello
+    title Scoreboard
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css")
+    link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css")
+    script(src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js")
   body
+    a(href="/drop_table" class="btn btn-primary") Drop Table
     if data.length
       each person in data
         p Name: #{person.name} 

@@ -57,6 +57,16 @@ app.post('/save', function(req, res) {
 	});
 });
 
+app.get('/drop_table', function(req, res) {
+  console.log("/drop_table");
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    db.dropDatabase();
+    db.close();
+    return res.redirect("/");
+  });
+});
+
 var getJsonDataFromRequest = function(req) {
 	console.log(req.body);
 	return req.body;
