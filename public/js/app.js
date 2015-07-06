@@ -18,6 +18,7 @@ var xmlhttp = new XMLHttpRequest();
 
 // Timer for countdown
 function startTimer(duration, display) {
+    // clearInterval(game.tid);
     var timer = duration;
     var tid = setInterval(function () {
 
@@ -29,11 +30,14 @@ function startTimer(duration, display) {
         }
 
     }, 1000);
+    game.timerID = tid;
+
 }
 
 var Game = function()
 {
     this.status = true;
+    this.score = 0;
 }
 
 Game.prototype.gameOver = function(type)
@@ -46,7 +50,7 @@ Game.prototype.gameOver = function(type)
     {
         $('#message').html("Times up!");
     }
-
+    clearInterval(game.timerID);
     this.status = false;
 
     save_to_db(10);
@@ -57,9 +61,21 @@ Game.prototype.gameOver = function(type)
 
 Game.prototype.restart = function()
 {
+    clearInterval(game.timerID);
+    brick.returnToStart();
+    bar.returnToStart();
+    map.clear();
+    leftFallingBrick.clear();
+    rightFallingBrick.clear();
+    this.score = 0;
+    game.status = true;
 
+}
 
-
+Game.prototype.updateScore = function(colscore)
+{
+    game.score  = game.score + colscore;
+    $("#score").html(game.score);
 }
 
 var Map = function(){
@@ -68,17 +84,126 @@ var Map = function(){
 
     var iMax = 16;
     var jMax = 10;
+
     this.grid = new Array(16);
+    this.typeGrid = new Array(16);
+    this.scoreGrid = new Array(16);
 
     for (i=0;i<iMax;i++) {
         this.grid[i] = new Array(10);
+        this.typeGrid[i] = new Array(10);
+        this.scoreGrid[i] = new Array(10);
+
         for (j=0;j<jMax;j++) {
             this.grid[i][j]=0;
+            this.typeGrid[i][j]=0;
+            this.scoreGrid[i][j]=0;
         }
     }
 
     this.fallingBrickNum = 0;
 
+}
+
+Map.prototype.clear = function(){
+
+    var iMax = Board.COL_NUM;
+    var jMax = Board.ROW_NUM;
+
+    for (i=0;i<iMax;i++) {
+        for (j=0;j<jMax;j++) {
+            this.grid[i][j]=0;
+            this.typeGrid[i][j]=0;
+            this.scoreGrid[i][j]=0;
+        }
+    }
+
+    this.fallingBrickNum = 0;
+    this.colHeight = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+}
+
+
+//input right bottom coordinate
+Map.prototype.checkBrickSameType = function(checkX, checkY){
+
+    if (checkY < 0)
+    {
+        return false;
+    }
+
+    if (checkY === Board.ROW_NUM)
+    {
+        return false;
+    }
+
+    if (checkX === 0)
+    {
+        return false;
+    }
+
+
+    if( map.grid[checkX][checkY] == map.grid[checkX][checkY+1]
+        && map.grid[checkX][checkY] == map.grid[checkX-1][checkY]
+        && map.grid[checkX][checkY] == map.grid[checkX-1][checkY+1]
+        )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+Map.prototype.checkBrickSameColor = function(checkX, checkY){
+
+    if (checkY < 0)
+    {
+        return false;
+    }
+
+    if (checkY === Board.ROW_NUM)
+    {
+        return false;
+    }
+
+    if (checkX === 0)
+    {
+        return false;
+    }
+
+
+    if( map.grid[checkX][checkY] % 2 == map.grid[checkX][checkY+1]% 2
+        && map.grid[checkX][checkY] % 2 == map.grid[checkX-1][checkY]% 2
+        && map.grid[checkX][checkY] % 2 == map.grid[checkX-1][checkY+1]% 2
+        && map.grid[checkX][checkY]!= 0
+        && map.grid[checkX][checkY+1]!= 0
+        && map.grid[checkX-1][checkY]!= 0
+        && map.grid[checkX-1][checkY+1]!= 0
+        )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+Map.prototype.changeBrickAddScoreGrid = function(changeX, changeY){
+
+    var newColor;
+    if (map.grid[changeX][changeY] > 2)
+    {
+        newColor = map.grid[changeX][changeY];
+    }
+    else
+    {
+        newColor = map.grid[changeX][changeY] + 2;
+    }
+
+    map.grid[changeX][changeY] = newColor;
+    map.grid[changeX][changeY+1] = newColor;
+    map.grid[changeX-1][changeY] = newColor;
+    map.grid[changeX-1][changeY+1] = newColor;
+
+    map.scoreGrid[changeX][changeY+1] = 1;
 }
 
 var FallingBrick = function(){
@@ -87,7 +212,7 @@ var FallingBrick = function(){
     this.sprite2 = "images/red.png";
 
     this.display = false;
-    this.speed = 500;
+    this.speed = 800;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
@@ -127,7 +252,7 @@ FallingBrick.prototype.render = function() {
 
     if (this.display === true)
     {
-        console.log(this.y);
+        // console.log(this.y);
         if(this.color[0] === 0)
         {
             ctx.drawImage(Resources.get(this.sprite1), this.x, this.y);
@@ -158,7 +283,9 @@ FallingBrick.prototype.checkCollisionWithMap = function() {
 
     // console.log(totalHeight);
     // console.log(mapHeight);
-    if ( totalHeight + mapHeight > Board.BOARD_HEIGHT)
+    // console.log(this.y);
+
+    if ( totalHeight + mapHeight >= Board.BOARD_HEIGHT)
     {
         // console.log("falling_brick_collide");
         // this.speed = 0;
@@ -171,8 +298,13 @@ FallingBrick.prototype.collide = function() {
     map.fallingBrickNum = map.fallingBrickNum - 1;
     // console.log(map.fallingBrickNum);
 
-    map.colHeight[this.col] = map.colHeight[this.col] + 2;
+    console.log(map.colHeight[this.col]);
+    if(map.colHeight[this.col] >= Board.ROW_NUM -1)
+    {
+        game.gameOver("dead");
+    }
 
+    map.colHeight[this.col] = map.colHeight[this.col] + 2;
 
     if (map.colHeight[(Board.COL_NUM/2)-1] >= Board.ROW_NUM
         || map.colHeight[(Board.COL_NUM/2)] >= Board.ROW_NUM
@@ -183,8 +315,8 @@ FallingBrick.prototype.collide = function() {
 
     map.grid[this.col][map.colHeight[this.col]-2] = this.color[1]+1;
     map.grid[this.col][map.colHeight[this.col]-1] = this.color[0]+1;
-
     this.setMap();
+
     this.display = false;
     this.x = -100;
     this.y = -100;
@@ -231,6 +363,8 @@ FallingBrick.prototype.setMap = function(){
             map.grid[midx][midy] = newColor;
             map.grid[midx-1][midy] = newColor;
             map.grid[midx][midy+1] = newColor;
+            map.scoreGrid[midx][midy+1] = 1;
+
         }
 
         if (midy>0)
@@ -256,6 +390,8 @@ FallingBrick.prototype.setMap = function(){
                 map.grid[midx][midy] = newColor;
                 map.grid[midx-1][midy] = newColor;
                 map.grid[midx][midy-1] = newColor;
+
+                map.scoreGrid[midx][midy] = 1;
             }
         }
     }
@@ -283,6 +419,8 @@ FallingBrick.prototype.setMap = function(){
             map.grid[midx][midy] = newColor;
             map.grid[midx+1][midy] = newColor;
             map.grid[midx][midy+1] = newColor;
+
+            map.scoreGrid[midx+1][midy+1] = 1;
         }
 
         if (midy>0)
@@ -307,10 +445,21 @@ FallingBrick.prototype.setMap = function(){
                 map.grid[midx][midy] = newColor;
                 map.grid[midx+1][midy] = newColor;
                 map.grid[midx][midy-1] = newColor;
+
+                map.scoreGrid[midx+1][midy] = 1;
             }
         }
     }
     // console.log(map.grid[this.col]);
+}
+
+FallingBrick.prototype.clear = function() {
+    this.display = false;
+    this.speed = 800;
+    this.x = 0;
+    this.y = 0;
+    this.color = [0,0];
+    this.col = -1;
 }
 
 
@@ -342,7 +491,7 @@ Bar.prototype.update = function(dt) {
 Bar.prototype.returnToStart = function() {
 
     // console.log(Board.BLOCK_SIZE);
-    this.speed = 75;
+    this.speed = 100;
     this.x = 0;
     this.y = 0;
     this.nextTarget = Board.BLOCK_SIZE/2;
@@ -367,6 +516,15 @@ Bar.prototype.pause = function() {
     this.y = 0;
 
 }
+
+// Bar.prototype.clear = function() {
+
+//     this.speed = 0;
+//     this.x = 0;
+//     this.y = 0;
+// }
+
+
 
 Bar.prototype.checkCollisionWithBrick = function() {
     // console.log(this.x);
@@ -400,8 +558,80 @@ Bar.prototype.clearBrick = function() {
         map.grid[currentCol][i] = 0;
     }
 
-    map.colHeight[currentCol] = fillIndex;
 
+
+    var colscore = 0;
+    for(var i = 0; i< map.colHeight[currentCol]; i++)
+    {
+        colscore = colscore + map.scoreGrid[currentCol][i];
+        map.scoreGrid[currentCol][i] = 0;
+    }
+
+    game.updateScore(colscore);
+    map.colHeight[currentCol] = fillIndex;
+    bar.updateGrid(currentCol);
+}
+
+Bar.prototype.updateGrid = function (currentCol){
+
+    if (currentCol === 1)
+    {
+        for(var i = 0; i< map.colHeight[currentCol-1]; i++)
+        {
+            if (map.grid[currentCol-1][i] > 2)
+            {
+                map.grid[currentCol-1][i] = map.grid[currentCol-1][i] - 2;
+            }
+        }
+    }
+    else if ( currentCol >= 2)
+    {
+        for(var i = 0; i< map.colHeight[currentCol-1]; i++)
+        {
+            if (map.grid[currentCol-1][i] > 2)
+            {
+                if( map.checkBrickSameColor(currentCol-1,i) || map.checkBrickSameColor(currentCol-1,i-1))
+                {
+                    // if( map.grid[currentCol-1][i] < 3)
+                    // {
+                    //     map.grid[currentCol-1][i] = map.grid[currentCol-1][i] + 2;
+                    // }
+
+                    // if( map.grid[currentCol-1][i+1] < 3)
+                    // {
+                    //     map.grid[currentCol-1][i+1] = map.grid[currentCol-1][i+1] + 2;
+                    // }
+
+                    // if( map.grid[currentCol-2][i+1] < 3)
+                    // {
+                    //     map.grid[currentCol-2][i+1] = map.grid[currentCol-2][i+1] + 2;
+                    // }
+
+                    // if( map.grid[currentCol-2][i] < 3)
+                    // {
+                    //     map.grid[currentCol-2][i] = map.grid[currentCol-2][i] + 2;
+                    // }
+
+                    // i++;
+                }
+                else
+                {
+                    map.grid[currentCol-1gi] = map.grid[currentCol-1][i] - 2;
+                }
+            }
+        }
+    }
+
+    if (currentCol >= 1)
+    {
+        for(var i = 0; i< map.colHeight[currentCol] - 1; i++)
+        {
+            if ( map.checkBrickSameColor(currentCol,i))
+            {
+                map.changeBrickAddScoreGrid(currentCol,i)
+            }
+        }
+    }
 }
 
 
@@ -510,7 +740,7 @@ Brick.prototype.checkCollisionWithMap = function() {
     var mapHeightRight = map.colHeight[this.col+1] * Board.BLOCK_SIZE;
     if ( totalHeight + mapHeightLeft > Board.BOARD_HEIGHT || totalHeight + mapHeightRight > Board.BOARD_HEIGHT )
     {
-        // console.log("collide");
+        console.log("collide");
         this.collide();
     }
 }
@@ -588,15 +818,21 @@ var bar = new Bar();
 
 $(document).ready(function() {
   $('button').click(function() {
-    $('#text1').html("click");
+
+    game.restart();
+
+    $('#text1').html("Click");
+    $('button').html("Restart");
+    $('#time').html("91");
+
     jQuery(function ($) {
-    var fiveMinutes = 10,
+    var fiveMinutes = 90,
         display = $('#time');
     startTimer(fiveMinutes, display);
     });
 
-    brick.returnToStart();
-    bar.returnToStart();
+    // brick.returnToStart();
+    // bar.returnToStart();
 
   });
 });
