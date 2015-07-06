@@ -121,7 +121,7 @@ Map.prototype.clear = function(){
 
 
 //input right bottom coordinate
-Map.prototype.checkBrick = function(checkX, checkY){
+Map.prototype.checkBrickSameType = function(checkX, checkY){
 
     if (checkY === Board.ROW_NUM)
     {
@@ -143,6 +143,54 @@ Map.prototype.checkBrick = function(checkX, checkY){
     }
 
     return false;
+}
+
+Map.prototype.checkBrickSameColor = function(checkX, checkY){
+
+    if (checkY === Board.ROW_NUM)
+    {
+        return false;
+    }
+
+    if (checkX === 0)
+    {
+        return false;
+    }
+
+
+    if( map.grid[checkX][checkY] % 2 == map.grid[checkX][checkY+1]% 2
+        && map.grid[checkX][checkY] % 2 == map.grid[checkX-1][checkY]% 2
+        && map.grid[checkX][checkY] % 2 == map.grid[checkX-1][checkY+1]% 2
+        && map.grid[checkX][checkY]!= 0
+        && map.grid[checkX][checkY+1]!= 0
+        && map.grid[checkX-1][checkY]!= 0
+        && map.grid[checkX-1][checkY+1]!= 0
+        )
+    {
+        return true;
+    }
+
+    return false;
+}
+
+Map.prototype.changeBrickAddScoreGrid = function(changeX, changeY){
+
+    var newColor;
+    if (map.grid[changeX][changeY] > 2)
+    {
+        newColor = map.grid[changeX][changeY];
+    }
+    else
+    {
+        newColor = map.grid[changeX][changeY] + 2;
+    }
+
+    map.grid[changeX][changeY] = newColor;
+    map.grid[changeX][changeY+1] = newColor;
+    map.grid[changeX-1][changeY] = newColor;
+    map.grid[changeX-1][changeY+1] = newColor;
+
+    map.scoreGrid[changeX][changeY+1] = 1;
 }
 
 var FallingBrick = function(){
@@ -507,9 +555,8 @@ Bar.prototype.clearBrick = function() {
     }
 
     game.updateScore(colscore);
-    bar.updateGrid(currentCol);
-
     map.colHeight[currentCol] = fillIndex;
+    bar.updateGrid(currentCol);
 }
 
 Bar.prototype.updateGrid = function (currentCol){
@@ -530,7 +577,7 @@ Bar.prototype.updateGrid = function (currentCol){
         {
             if (map.grid[currentCol-1][i] > 2)
             {
-                if( map.checkBrick(currentCol-1,i))
+                if( map.checkBrickSameType(currentCol-1,i))
                 {
                     i++;
                 }
@@ -538,6 +585,17 @@ Bar.prototype.updateGrid = function (currentCol){
                 {
                     map.grid[currentCol-1][i] = map.grid[currentCol-1][i] - 2;
                 }
+            }
+        }
+    }
+
+    if (currentCol >= 1)
+    {
+        for(var i = 0; i< map.colHeight[currentCol] - 1; i++)
+        {
+            if ( map.checkBrickSameColor(currentCol,i))
+            {
+                map.changeBrickAddScoreGrid(currentCol,i)
             }
         }
     }
