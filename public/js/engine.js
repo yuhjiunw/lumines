@@ -35,12 +35,19 @@ var Engine = (function(global) {
     var doc = global.document,
         win = global.window,
         canvas = doc.createElement('canvas'),
+        nextBrickCanvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        ctx2 = nextBrickCanvas.getContext('2d'),
         lastTime;
 
     canvas.width = 480;
     canvas.height = 300;
+
+    nextBrickCanvas.width = 80;
+    nextBrickCanvas.height = 300;
+
     doc.body.appendChild(canvas);
+    doc.body.appendChild(nextBrickCanvas);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
@@ -142,6 +149,11 @@ var Engine = (function(global) {
          * and, using the rowImages array, draw the correct image for that
          * portion of the "grid"
          */
+         ctx2.drawImage(Resources.get('images/nextbrickBG.png'), 0, 0);
+         if (game.renderNextFive)
+         {
+            brick.renderNextFiveBrick();
+         }
 
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
@@ -211,7 +223,8 @@ var Engine = (function(global) {
         'images/blue_30_30.png',
         'images/slidebar.png',
         'images/dark_orange_30_30.png',
-        'images/dark_gray_30_30.png'
+        'images/dark_gray_30_30.png',
+        'images/nextbrickBG.png'
     ]);
     Resources.onReady(init);
 
@@ -220,4 +233,5 @@ var Engine = (function(global) {
      * from within their app.js files.
      */
     global.ctx = ctx;
+    global.ctx2 = ctx2;
 })(this);

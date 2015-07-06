@@ -37,6 +37,7 @@ function startTimer(duration, display) {
 var Game = function()
 {
     this.status = true;
+    this.renderNextFive = false;
     this.score = 0;
 }
 
@@ -62,6 +63,9 @@ Game.prototype.gameOver = function(type)
 Game.prototype.restart = function()
 {
     clearInterval(game.timerID);
+    brick.setRandomFive();
+    this.renderNextFive = true;
+
     brick.returnToStart();
     bar.returnToStart();
     map.clear();
@@ -298,7 +302,7 @@ FallingBrick.prototype.collide = function() {
     map.fallingBrickNum = map.fallingBrickNum - 1;
     // console.log(map.fallingBrickNum);
 
-    console.log(map.colHeight[this.col]);
+    // console.log(map.colHeight[this.col]);
     if(map.colHeight[this.col] >= Board.ROW_NUM -1)
     {
         game.gameOver("dead");
@@ -642,7 +646,11 @@ var Brick = function(){
     //  1 2
     //
 
-    this.color = [0,0,1,0];
+    this.color = [0,0,0,0];
+    this.nextFive = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
+    // this.setRandomFive();
+
+
     this.sprite1 = "images/gray_30_30.png";
     this.sprite2 = "images/orange_30_30.png";
     this.speed = 0;
@@ -653,20 +661,86 @@ var Brick = function(){
     // console.log(this.y);
 }
 
+Brick.prototype.setRandomFive = function() {
+
+    for(var i = 0; i < 5; i++)
+    {
+        for(var j = 0; j < 4; j++)
+        {
+            if(Math.random() > 0.5)
+            {
+                this.nextFive[i][j] = 1;
+            }
+            else
+            {
+                this.nextFive[i][j] = 0;
+            }
+        }
+    }
+    console.log("setRandomFive");
+    console.log(this.nextFive[0]);
+    console.log(this.nextFive[1]);
+    console.log(this.nextFive[2]);
+    console.log(this.nextFive[3]);
+    console.log(this.nextFive[4]);
+
+}
+
+
+Brick.prototype.renderNextFiveBrick = function() {
+
+    this.renderNext(this.nextFive[0],10,0);
+    this.renderNext(this.nextFive[1],10,60);
+    this.renderNext(this.nextFive[2],10,120);
+    this.renderNext(this.nextFive[3],10,180);
+    this.renderNext(this.nextFive[4],10,240);
+
+}
+
+Brick.prototype.renderNext = function(colorArray, x, y) {
+
+    for(var i = 0; i < BRICK_OFFSET.length; i++)
+    {
+
+        var currentX = x + BRICK_OFFSET[i][0];
+        var currentY = y + BRICK_OFFSET[i][1];
+        // console.log(currentX);
+        // console.log(currentY);
+
+        if(colorArray[i] === 0)
+        {
+            ctx2.drawImage(Resources.get(this.sprite1), currentX, currentY);
+        }
+        else
+        {
+            ctx2.drawImage(Resources.get(this.sprite2), currentX, currentY);
+        }
+    }
+    // ctx.drawImage(Resources.get(this.sprite1), currentX, currentY);
+
+}
+
 
 Brick.prototype.setRandomBrick = function() {
 
+    this.color = this.nextFive[0];
+    this.nextFive.shift();
+
+    var newbrick = [0,0,0,0];
     for(var i = 0; i < Board.BLOCK_NUM; i++)
     {
         if(Math.random() > 0.5)
         {
-            this.color[i] = 1;
+            newbrick[i] = 1;
         }
         else
         {
-            this.color[i] = 0;
+            newbrick[i] = 0;
         }
     }
+
+    this.nextFive.push(newbrick);
+
 }
 
 
