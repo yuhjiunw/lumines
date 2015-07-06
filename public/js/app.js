@@ -823,10 +823,10 @@ $(document).ready(function() {
 
     $('#text1').html("Click");
     $('button').html("Restart");
-    $('#time').html("91");
+    $('#time').html("90");
 
     jQuery(function ($) {
-    var fiveMinutes = 90,
+    var fiveMinutes = 89,
         display = $('#time');
     startTimer(fiveMinutes, display);
     });
