@@ -613,7 +613,7 @@ Bar.prototype.updateGrid = function (currentCol){
                 }
                 else
                 {
-                    map.grid[currentCol-1gi] = map.grid[currentCol-1][i] - 2;
+                    map.grid[currentCol-1][i] = map.grid[currentCol-1][i] - 2;
                 }
             }
         }
