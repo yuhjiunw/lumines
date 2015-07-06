@@ -123,6 +123,11 @@ Map.prototype.clear = function(){
 //input right bottom coordinate
 Map.prototype.checkBrickSameType = function(checkX, checkY){
 
+    if (checkY < 0)
+    {
+        return false;
+    }
+
     if (checkY === Board.ROW_NUM)
     {
         return false;
@@ -146,6 +151,11 @@ Map.prototype.checkBrickSameType = function(checkX, checkY){
 }
 
 Map.prototype.checkBrickSameColor = function(checkX, checkY){
+
+    if (checkY < 0)
+    {
+        return false;
+    }
 
     if (checkY === Board.ROW_NUM)
     {
@@ -199,7 +209,7 @@ var FallingBrick = function(){
     this.sprite2 = "images/red.png";
 
     this.display = false;
-    this.speed = 500;
+    this.speed = 800;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
@@ -442,7 +452,7 @@ FallingBrick.prototype.setMap = function(){
 
 FallingBrick.prototype.clear = function() {
     this.display = false;
-    this.speed = 500;
+    this.speed = 800;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
@@ -478,7 +488,7 @@ Bar.prototype.update = function(dt) {
 Bar.prototype.returnToStart = function() {
 
     // console.log(Board.BLOCK_SIZE);
-    this.speed = 75;
+    this.speed = 100;
     this.x = 0;
     this.y = 0;
     this.nextTarget = Board.BLOCK_SIZE/2;
@@ -577,13 +587,33 @@ Bar.prototype.updateGrid = function (currentCol){
         {
             if (map.grid[currentCol-1][i] > 2)
             {
-                if( map.checkBrickSameType(currentCol-1,i))
+                if( map.checkBrickSameColor(currentCol-1,i) || map.checkBrickSameColor(currentCol-1,i-1))
                 {
-                    i++;
+                    // if( map.grid[currentCol-1][i] < 3)
+                    // {
+                    //     map.grid[currentCol-1][i] = map.grid[currentCol-1][i] + 2;
+                    // }
+
+                    // if( map.grid[currentCol-1][i+1] < 3)
+                    // {
+                    //     map.grid[currentCol-1][i+1] = map.grid[currentCol-1][i+1] + 2;
+                    // }
+
+                    // if( map.grid[currentCol-2][i+1] < 3)
+                    // {
+                    //     map.grid[currentCol-2][i+1] = map.grid[currentCol-2][i+1] + 2;
+                    // }
+
+                    // if( map.grid[currentCol-2][i] < 3)
+                    // {
+                    //     map.grid[currentCol-2][i] = map.grid[currentCol-2][i] + 2;
+                    // }
+
+                    // i++;
                 }
                 else
                 {
-                    map.grid[currentCol-1][i] = map.grid[currentCol-1][i] - 2;
+                    map.grid[currentCol-1gi] = map.grid[currentCol-1][i] - 2;
                 }
             }
         }
