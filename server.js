@@ -34,8 +34,17 @@ var server = app.listen(3000, function () {
 });
 
 app.get('/list', function (req, res) {
-  return res.render('list', { title: 'Hey', message: 'Hello there!'});
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    getDataFromDB(db, function(results) {
+      console.log(results);
+      res.render('list', {data : results});
+      db.close();
+    });
+  });
 });
+
+var data_in_db;
 
 app.post('/save', function(req, res) {
 	console.log("/save");
@@ -61,5 +70,13 @@ var insertDocument = function(db, data, callback) {
     assert.equal(err, null);
     console.log("Inserted a document into the restaurants collection.");
     callback(result);
+  });
+};
+
+var getDataFromDB = function(db, callback) {
+  var cursor =db.collection('lumines_scores').find();
+  cursor.toArray(function(err, doc) {
+    assert.equal(err, null);
+    callback(doc);
   });
 };
