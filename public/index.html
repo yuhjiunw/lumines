@@ -4,12 +4,29 @@
     <meta charset="UTF-8">
     <title>Lumines Game</title>
     <link rel="stylesheet" href="css/style.css">
+
+    <!-- JQuery CDN -->
+    <script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
     <div>
         <span id = "time">90</span>
     </div>
-    <div><button>Start Game</button></div>
+    <div><button class="btn btn-primary">Start Game</button></div>
+</br>
+    <div class="row">
+        <div class="col-md-4"> </div>
+        <div class="col-md-4"> <input type="text" class="form-control" id="player_name" placeholder="Please Enter Your Name">
+        </div>
+        <div class="col-md-4"> </div>
+    </div>
     <div id = "text1">LUMINES</div>
     <div id = "scoretext">Current Score</div>
     <div id = "score">0</div>

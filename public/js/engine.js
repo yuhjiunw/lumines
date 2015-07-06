@@ -123,16 +123,16 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/blue.png',
-                'images/green.png',
-                'images/blue.png',
-                'images/green.png',
-                'images/blue.png',
-                'images/green.png',
-                'images/blue.png',
-                'images/green.png',
-                'images/blue.png',
-                'images/green.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png',
+                'images/blue_30_30.png'
             ],
             numRows = Board.ROW_NUM,
             numCols = Board.COL_NUM,
@@ -158,19 +158,19 @@ var Engine = (function(global) {
                 }
                 else if (map.grid[col][row] === 1)
                 {
-                    ctx.drawImage(Resources.get('images/purple.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+                    ctx.drawImage(Resources.get('images/gray_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
                 else if (map.grid[col][row] === 2)
                 {
-                    ctx.drawImage(Resources.get('images/red.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+                    ctx.drawImage(Resources.get('images/orange_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
                 else if (map.grid[col][row] === 3)
                 {
-                    ctx.drawImage(Resources.get('images/lightpurple.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+                    ctx.drawImage(Resources.get('images/dark_gray_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
                 else if (map.grid[col][row] === 4)
                 {
-                    ctx.drawImage(Resources.get('images/lightred.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+                    ctx.drawImage(Resources.get('images/dark_orange_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
 
             }
@@ -205,13 +205,13 @@ var Engine = (function(global) {
      * all of these images are properly loaded our game will start.
      */
     Resources.load([
-        'images/blue.png',
-        'images/purple.png',
-        'images/red.png',
-        'images/green.png',
+        'images/blue_30_30.png',
+        'images/gray_30_30.png',
+        'images/orange_30_30.png',
+        'images/blue_30_30.png',
         'images/slidebar.png',
-        'images/lightred.png',
-        'images/lightpurple.png'
+        'images/dark_orange_30_30.png',
+        'images/dark_gray_30_30.png'
     ]);
     Resources.onReady(init);
 

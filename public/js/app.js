@@ -53,7 +53,7 @@ Game.prototype.gameOver = function(type)
     clearInterval(game.timerID);
     this.status = false;
 
-    save_to_db(10);
+    save_to_db(game.score, $('#player_name').val());
 
     // bar.pause();
     // brick.pause();
@@ -208,8 +208,8 @@ Map.prototype.changeBrickAddScoreGrid = function(changeX, changeY){
 
 var FallingBrick = function(){
 
-    this.sprite1 = "images/purple.png";
-    this.sprite2 = "images/red.png";
+    this.sprite1 = "images/gray_30_30.png";
+    this.sprite2 = "images/orange_30_30.png";
 
     this.display = false;
     this.speed = 800;
@@ -643,8 +643,8 @@ var Brick = function(){
     //
 
     this.color = [0,0,1,0];
-    this.sprite1 = "images/purple.png";
-    this.sprite2 = "images/red.png";
+    this.sprite1 = "images/gray_30_30.png";
+    this.sprite2 = "images/orange_30_30.png";
     this.speed = 0;
     // this.returnToStart();
     // this.x = (Board.COL_NUM/2) * Board.BLOCK_SIZE - Board.BLOCK_SIZE;
@@ -855,9 +855,9 @@ document.addEventListener('keyup', function(e) {
 
 // Database
 
-var save_to_db = function(score) {
-    console.log("save_to_db");
+var save_to_db = function(score, name) {
+    console.log("save_to_db: " + score + "  " + name);
     xmlhttp.open("POST", "http://localhost:3000/save", true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send("score=" + score);
+    xmlhttp.send("score=" + score + "&name=" + name);
 }
