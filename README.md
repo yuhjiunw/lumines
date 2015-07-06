@@ -3,7 +3,7 @@
 ##### Install
 
 ```
-npm install express mongodb body-parser
+npm install express mongodb body-parser jade
 ```
 
 ##### Usage

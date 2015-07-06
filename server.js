@@ -16,6 +16,10 @@ app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
 
 app.use(express.static('public'));
 
+// use jade as template engine
+app.set('views', './views');
+app.set('view engine', 'jade');
+
 // app.get('/', function (req, res) {
 //   res.send('Hello World!');
 // });
@@ -27,6 +31,10 @@ var server = app.listen(3000, function () {
 
   console.log('Example app listening at http://%s:%s', host, port);
 
+});
+
+app.get('/list', function (req, res) {
+  return res.render('list', { title: 'Hey', message: 'Hello there!'});
 });
 
 app.post('/save', function(req, res) {
@@ -46,7 +54,6 @@ var getJsonDataFromRequest = function(req) {
 }
 
 var insertDocument = function(db, data, callback) {
-
   var db_client = db.collection('lumines_scores');
   db_client.insertOne(
    	data // json object
