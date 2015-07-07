@@ -79,9 +79,9 @@ var insertDocument = function(db, data, callback) {
 };
 
 var getDataFromDB = function(db, callback) {
-  var cursor =db.collection('lumines_scores').find().sort( { score: 1 } );
+  var cursor =db.collection('lumines_scores').find().sort( { score: -1 } );
   cursor.toArray(function(err, doc) {
     assert.equal(err, null);
-    callback(doc.slice(10).reverse());
+    callback(doc.slice(0, 10));
   });
 };
