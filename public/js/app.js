@@ -58,6 +58,7 @@ Game.prototype.gameOver = function(type)
     this.status = false;
 
     save_to_db(game.score, $('#player_name').val());
+    $('#start_button').focus();
 
     // bar.pause();
     // brick.pause();
@@ -65,6 +66,7 @@ Game.prototype.gameOver = function(type)
 
 Game.prototype.restart = function()
 {
+    $('#start_button').blur();
     clearInterval(game.timerID);
     brick.setRandomFive();
     this.renderNextFive = true;
@@ -76,7 +78,6 @@ Game.prototype.restart = function()
     rightFallingBrick.clear();
     this.score = 0;
     game.status = true;
-
 }
 
 Game.prototype.updateScore = function(colscore)
