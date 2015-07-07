@@ -42,6 +42,22 @@ var Game = function()
     this.score = 0;
 }
 
+Game.prototype.pause = function()
+{
+    brick.pause();
+    leftFallingBrick.pause();
+    rightFallingBrick.pause();
+    bar.pause();
+}
+
+Game.prototype.resume = function()
+{
+    brick.resume();
+    leftFallingBrick.resume();
+    rightFallingBrick.resume();
+    bar.resume();
+}
+
 Game.prototype.gameOver = function(type)
 {
 
@@ -339,6 +355,14 @@ FallingBrick.prototype.collide = function() {
 
 }
 
+FallingBrick.prototype.pause = function(){
+    this.speed = 0;
+}
+
+FallingBrick.prototype.resume = function(){
+    this.speed = 1200;
+}
+
 FallingBrick.prototype.setMap = function(){
 
     var midx = this.col;
@@ -521,8 +545,16 @@ Bar.prototype.updateNextTarget = function() {
 Bar.prototype.pause = function() {
 
     this.speed = 0;
-    this.x = 0;
-    this.y = 0;
+    // this.x = 0;
+    // this.y = 0;
+
+}
+
+Bar.prototype.resume = function() {
+
+    this.speed = 100;
+    // this.x = 0;
+    // this.y = 0;
 
 }
 
@@ -784,7 +816,14 @@ Brick.prototype.returnToStart = function() {
 Brick.prototype.pause = function() {
 
     this.speed = 0;
-    this.display = false;
+    // this.display = false;
+
+}
+
+Brick.prototype.resume = function() {
+
+    this.speed = 50;
+    // this.display = false;
 
 }
 
@@ -898,12 +937,13 @@ var bar = new Bar();
 
 
 $(document).ready(function() {
-  $('button').click(function() {
+  $('#start_button').click(function() {
 
     game.restart();
 
     $('#text1').html("Click");
-    $('button').html("Restart");
+    $('#start_button').html("Restart");
+    $('#pause_button').html("Pause");
     $('#time').html("90");
 
     jQuery(function ($) {
@@ -914,6 +954,24 @@ $(document).ready(function() {
 
     // brick.returnToStart();
     // bar.returnToStart();
+
+  });
+});
+
+$(document).ready(function() {
+  $('#pause_button').click(function() {
+
+    if(game.status)
+    {
+        $('#pause_button').html("Resume");
+        game.pause();
+    }
+    else
+    {
+
+
+    }
+
 
   });
 });
