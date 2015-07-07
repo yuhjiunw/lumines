@@ -7,7 +7,7 @@ var assert = require('assert')
 var ObjectId = require('mongodb').ObjectID;
 var url = process.env.MONGOLAB_URI || 
   process.env.MONGOHQ_URL || 
-  'mongodb://localhost:27017/mydb';
+  'mongodb://localhost:27017/test';
 //
 
 var bodyParser = require('body-parser')
