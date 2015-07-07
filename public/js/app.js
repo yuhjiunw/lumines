@@ -40,9 +40,11 @@ var Game = function()
     this.status = true;
     this.renderNextFive = false;
     this.score = 0;
+    this.pause = false;
+    this.pausetime = 0;
 }
 
-Game.prototype.pause = function()
+Game.prototype.pausefunc = function()
 {
     brick.pause();
     leftFallingBrick.pause();
@@ -94,6 +96,7 @@ Game.prototype.restart = function()
     leftFallingBrick.clear();
     rightFallingBrick.clear();
     this.score = 0;
+    this.pause = false;
     game.status = true;
 }
 
@@ -963,8 +966,26 @@ $(document).ready(function() {
 
     if(game.status)
     {
-        $('#pause_button').html("Resume");
-        game.pause();
+        if (game.pause)
+        {
+            $('#pause_button').html("Pause");
+            game.resume();
+            game.pause = false;
+            jQuery(function ($) {
+                display = $('#time');
+            startTimer(game.pausetime-1, display);
+            });
+
+        }
+        else
+        {
+            $('#pause_button').html("Resume");
+            game.pausefunc();
+            game.pause = true;
+            game.pausetime = $('#time').text();
+            clearInterval(game.timerID);
+            console.log(game.pausetime);
+        }
     }
     else
     {
