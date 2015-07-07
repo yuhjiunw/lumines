@@ -43,8 +43,8 @@ app.get('/list', function (req, res) {
 var data_in_db;
 
 app.post('/save', function(req, res) {
-	console.log("/save");
 	var json_data = getJsonDataFromRequest(req);
+  json_data.score-=[]; // string to int, if int then nothing hapen
 	MongoClient.connect(url, function(err, db) {
 	  assert.equal(null, err);
 	  insertDocument(db, json_data, function() {
@@ -54,7 +54,6 @@ app.post('/save', function(req, res) {
 });
 
 app.get('/drop_table', function(req, res) {
-  console.log("/drop_table");
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     db.dropDatabase();
@@ -80,9 +79,9 @@ var insertDocument = function(db, data, callback) {
 };
 
 var getDataFromDB = function(db, callback) {
-  var cursor =db.collection('lumines_scores').find();
+  var cursor =db.collection('lumines_scores').find().sort( { score: 1 } );
   cursor.toArray(function(err, doc) {
     assert.equal(err, null);
-    callback(doc);
+    callback(doc.slice(10).reverse());
   });
 };
