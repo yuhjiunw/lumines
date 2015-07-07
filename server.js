@@ -5,9 +5,7 @@ var app = express();
 var MongoClient = require('mongodb');
 var assert = require('assert')
 var ObjectId = require('mongodb').ObjectID;
-var url = process.env.MONGOLAB_URI || 
-  process.env.MONGOHQ_URL || 
-  'mongodb://localhost:27017/test';
+var url = 'mongodb://b97901028:testtest123@ds047672.mongolab.com:47672/lumines';
 //
 
 var bodyParser = require('body-parser')
