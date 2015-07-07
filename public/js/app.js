@@ -221,7 +221,7 @@ var FallingBrick = function(){
     this.sprite2 = "images/orange_30_30.png";
 
     this.display = false;
-    this.speed = 800;
+    this.speed = 1200;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
@@ -464,7 +464,7 @@ FallingBrick.prototype.setMap = function(){
 
 FallingBrick.prototype.clear = function() {
     this.display = false;
-    this.speed = 800;
+    this.speed = 1200;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
