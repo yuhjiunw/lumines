@@ -43,6 +43,9 @@ var Game = function()
 
 Game.prototype.gameOver = function(type)
 {
+
+    console.log("game over");
+
     if (type === "dead")
     {
         $('#message').html("Game Over");
