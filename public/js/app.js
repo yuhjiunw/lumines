@@ -7,13 +7,14 @@ var Board = {
     BLOCK_WIDTH: 30,
     BLOCK_HEIGHT: 30,
     BLOCK_SIZE: 30,
+    BLOCK_SIZE_SMALL: 20,
     COL_NUM: 16,
     ROW_NUM: 10,
     BLOCK_NUM: 4
 };
 
 var BRICK_OFFSET = [[0,0],[0,Board.BLOCK_SIZE],[Board.BLOCK_SIZE,Board.BLOCK_SIZE], [Board.BLOCK_SIZE,0]];
-
+var BRICK_OFFSET_SMALL = [[0,0],[0,Board.BLOCK_SIZE_SMALL],[Board.BLOCK_SIZE_SMALL,Board.BLOCK_SIZE_SMALL], [Board.BLOCK_SIZE_SMALL,0]];
 var xmlhttp = new XMLHttpRequest();
 
 // Timer for countdown
@@ -657,6 +658,8 @@ var Brick = function(){
 
     this.sprite1 = "images/gray_30_30.png";
     this.sprite2 = "images/orange_30_30.png";
+    this.sprite1_small = "images/gray_20_20.png";
+    this.sprite2_small = "images/orange_20_20.png";
     this.speed = 0;
     // this.returnToStart();
     // this.x = (Board.COL_NUM/2) * Board.BLOCK_SIZE - Board.BLOCK_SIZE;
@@ -693,31 +696,31 @@ Brick.prototype.setRandomFive = function() {
 
 Brick.prototype.renderNextFiveBrick = function() {
 
-    this.renderNext(this.nextFive[0],10,0);
-    this.renderNext(this.nextFive[1],10,60);
-    this.renderNext(this.nextFive[2],10,120);
-    this.renderNext(this.nextFive[3],10,180);
-    this.renderNext(this.nextFive[4],10,240);
+    this.renderNext(this.nextFive[0],20,10);
+    this.renderNext(this.nextFive[1],20,70);
+    this.renderNext(this.nextFive[2],20,130);
+    this.renderNext(this.nextFive[3],20,190);
+    this.renderNext(this.nextFive[4],20,250);
 
 }
 
 Brick.prototype.renderNext = function(colorArray, x, y) {
 
-    for(var i = 0; i < BRICK_OFFSET.length; i++)
+    for(var i = 0; i < BRICK_OFFSET_SMALL.length; i++)
     {
 
-        var currentX = x + BRICK_OFFSET[i][0];
-        var currentY = y + BRICK_OFFSET[i][1];
+        var currentX = x + BRICK_OFFSET_SMALL[i][0];
+        var currentY = y + BRICK_OFFSET_SMALL[i][1];
         // console.log(currentX);
         // console.log(currentY);
 
         if(colorArray[i] === 0)
         {
-            ctx2.drawImage(Resources.get(this.sprite1), currentX, currentY);
+            ctx2.drawImage(Resources.get(this.sprite1_small), currentX, currentY);
         }
         else
         {
-            ctx2.drawImage(Resources.get(this.sprite2), currentX, currentY);
+            ctx2.drawImage(Resources.get(this.sprite2_small), currentX, currentY);
         }
     }
     // ctx.drawImage(Resources.get(this.sprite1), currentX, currentY);

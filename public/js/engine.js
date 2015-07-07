@@ -21,10 +21,10 @@ var Board = {
     BLOCK_WIDTH: 30,
     BLOCK_HEIGHT: 30,
     BLOCK_SIZE: 30,
+    BLOCK_SIZE_SMALL: 20,
     COL_NUM: 16,
     ROW_NUM: 10,
     BLOCK_NUM: 4
-
 };
 
 var Engine = (function(global) {
@@ -220,6 +220,8 @@ var Engine = (function(global) {
         'images/blue_30_30.png',
         'images/gray_30_30.png',
         'images/orange_30_30.png',
+        'images/gray_20_20.png',
+        'images/orange_20_20.png',
         'images/blue_30_30.png',
         'images/slidebar.png',
         'images/dark_orange_30_30.png',
