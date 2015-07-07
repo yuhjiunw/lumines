@@ -934,7 +934,7 @@ document.addEventListener('keyup', function(e) {
 
 var save_to_db = function(score, name) {
     console.log("save_to_db: " + score + "  " + name);
-    xmlhttp.open("POST", "http://localhost:3000/save", true);
+    xmlhttp.open("POST", "/save", true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
     xmlhttp.send("score=" + score + "&name=" + name);
 }
