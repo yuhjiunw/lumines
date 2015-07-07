@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 
 // Database
-var MongoClient = require('mongodb').MongoClient;
+var MongoClient = require('mongodb');
 var assert = require('assert')
 var ObjectId = require('mongodb').ObjectID;
 var url = process.env.MONGOLAB_URI || 
