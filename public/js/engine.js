@@ -33,10 +33,10 @@ var Engine = (function(global) {
      * create the canvas element, grab the 2D context for that canvas
      * set the canvas elements height/width and add it to the DOM.
      */
-    var doc = global.document,
+    var div = document.getElementById("game-arena"),
         win = global.window,
-        canvas = doc.createElement('canvas'),
-        nextBrickCanvas = doc.createElement('canvas'),
+        canvas = document.createElement('canvas'),
+        nextBrickCanvas = document.createElement('canvas'),
         ctx = canvas.getContext('2d'),
         ctx2 = nextBrickCanvas.getContext('2d'),
         lastTime;
@@ -47,8 +47,8 @@ var Engine = (function(global) {
     nextBrickCanvas.width = 80;
     nextBrickCanvas.height = 360;
 
-    doc.body.appendChild(canvas);
-    doc.body.appendChild(nextBrickCanvas);
+    div.appendChild(canvas);
+    div.appendChild(nextBrickCanvas);
 
     /* This function serves as the kickoff point for the game loop itself
      * and handles properly calling the update and render methods.
