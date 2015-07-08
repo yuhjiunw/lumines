@@ -945,7 +945,6 @@ $(document).ready(function() {
 
     game.restart();
 
-    $('#text1').html("Click");
     $('#start_button').html("Restart");
     $('#pause_button').html("Pause");
     $('#time').html("90");
