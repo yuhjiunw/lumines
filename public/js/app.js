@@ -182,6 +182,56 @@ Map.prototype.checkBrickSameType = function(checkX, checkY){
     return false;
 }
 
+Map.prototype.checkBrickIsDarkType = function(checkX, checkY){
+
+    if (checkY >= Board.ROW_NUM - 1)
+    {
+        return 0;
+    }
+
+    if (checkX === 0)
+    {
+        return 0;
+    }
+
+    if( map.grid[checkX][checkY] === map.grid[checkX][checkY+1]
+        && map.grid[checkX][checkY]  === map.grid[checkX-1][checkY]
+        && map.grid[checkX][checkY]  === map.grid[checkX-1][checkY+1]
+        && map.grid[checkX][checkY] > 2
+        && map.grid[checkX][checkY+1]> 2
+        && map.grid[checkX-1][checkY]> 2
+        && map.grid[checkX-1][checkY+1]> 2
+        )
+    {
+        return map.grid[checkX][checkY];
+    }
+
+    return 0;
+}
+
+Map.prototype.updateTypeGrid = function()
+{
+    for (var i = Board.COL_NUM - 1; i > 0 ;i--)
+    {
+        for (var j = 0; j < Board.ROW_NUM - 1  ; j++)
+        {
+            if ( checkBrickIsDarkType(i,j) != 0 )
+            {
+
+
+            }
+
+
+
+
+        }
+    }
+
+
+
+}
+
+
 Map.prototype.checkBrickSameColor = function(checkX, checkY){
 
     if (checkY < 0)
@@ -189,7 +239,7 @@ Map.prototype.checkBrickSameColor = function(checkX, checkY){
         return false;
     }
 
-    if (checkY === Board.ROW_NUM)
+    if (checkY >= Board.ROW_NUM - 1)
     {
         return false;
     }
@@ -864,9 +914,15 @@ Brick.prototype.checkCollisionWithMap = function() {
     var mapHeightRight = map.colHeight[this.col+1] * Board.BLOCK_SIZE;
     if ( totalHeight + mapHeightLeft > Board.BOARD_HEIGHT || totalHeight + mapHeightRight > Board.BOARD_HEIGHT )
     {
-        console.log("collide");
+        // console.log("collide");
         this.collide();
     }
+}
+
+Brick.prototype.beforeCollide = function() {
+
+
+
 }
 
 Brick.prototype.collide = function() {
