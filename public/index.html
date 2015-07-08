@@ -16,23 +16,45 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 </head>
 <body>
-    <div>
-        <span id="time">90</span>
+
+</br>
+</br>
+</br>
+    <div id="game_arena" style="background-color: white">
+        <div class="row" style="margin-left: 0px; margin-right: 0px">
+            
+            <div class="col-md-4 col-md-offset-3">
+                <span class="col-md-2 label label-info" style="margin-top: 1%; font-size: 100%; width: 40%"> Remaining Time</span>
+                <span class="col-md-2 label label-info" id="scoretext" style="margin-top: 1%; font-size: 100%; width: 40%; margin-left: 10%">Current Score</span>
+            </br>
+            </br>
+                <span class="col-md-2 label label-info" id="time" style="margin-top: 1%; font-size: 300%; width: 40%">90</span>
+                <span class="col-md-2 label label-info" id="score" style="margin-top: 1%; font-size: 300%; width: 40%; margin-left: 10%">0</span>
+            </div>
+
+            <div class="col-md-2" style="margin-left: 0%">
+                <button id="start_button" class="btn btn-primary" style="margin-top: 1%; width: 100%">Start Game</button>
+            </br></br>
+                <button id="pause_button" class="btn btn-primary" style="margin-top: 1%; width: 100%"> Pause</button>
+            </br></br>
+                <input type="text" class="form-control text-centered" id="player_name" placeholder="Please Enter Your Name" style="width: 100%" />
+            </div>
+
+        </div>
+        <div class="col-md-6 col-md-offset-3" style="margin-top: -1%">
+            <span id="message" class="label label-info" style="font-size: 120%; width: 50%;">Welcome!</span>
+            </br>
+            <div style="margin-top: 3%">
+                <script src="js/resources.js"></script>
+                <script src="js/app.js"></script>
+                <script src="js/engine.js"></script>
+            </div>
+        </div>
     </div>
-    <div><button id="start_button" class="btn btn-primary">Start Game</button></div>
-    <div><button id="pause_button" class="btn btn-primary">Pause</button></div>
-
 </br>
-    <input type="text" class="form-control" id="player_name" placeholder="Please Enter Your Name">
-</br>
-    <a class="btn btn-primary" href="/list">Scoreboard</a>
-    <div id="scoretext">Current Score</div>
-    <div id="score">0</div>
-    <div id="message">Welcome!</div>
+    
 
-    <script src="js/resources.js"></script>
-    <script src="js/app.js"></script>
-    <script src="js/engine.js"></script>
+
 
 </body>
 </html>
