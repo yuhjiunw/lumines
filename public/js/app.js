@@ -2,7 +2,7 @@
 
 // Define paremeters for board
 var Board = {
-    BOARD_HEIGHT: 300,
+    BOARD_HEIGHT: 360,
     BOARD_WIDTH: 480,
     BLOCK_WIDTH: 30,
     BLOCK_HEIGHT: 30,
@@ -10,7 +10,8 @@ var Board = {
     BLOCK_SIZE_SMALL: 20,
     COL_NUM: 16,
     ROW_NUM: 10,
-    BLOCK_NUM: 4
+    BLOCK_NUM: 4,
+    MAP_OFFSET: 60
 };
 
 var BRICK_OFFSET = [[0,0],[0,Board.BLOCK_SIZE],[Board.BLOCK_SIZE,Board.BLOCK_SIZE], [Board.BLOCK_SIZE,0]];
@@ -240,7 +241,7 @@ var FallingBrick = function(){
     this.sprite2 = "images/orange_30_30.png";
 
     this.display = false;
-    this.speed = 1200;
+    this.speed = 1500;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
@@ -334,12 +335,12 @@ FallingBrick.prototype.collide = function() {
 
     map.colHeight[this.col] = map.colHeight[this.col] + 2;
 
-    if (map.colHeight[(Board.COL_NUM/2)-1] >= Board.ROW_NUM
-        || map.colHeight[(Board.COL_NUM/2)] >= Board.ROW_NUM
-        )
-    {
-        game.gameOver("dead");
-    }
+    // if (map.colHeight[(Board.COL_NUM/2)-1] >= Board.ROW_NUM
+    //     || map.colHeight[(Board.COL_NUM/2)] >= Board.ROW_NUM
+    //     )
+    // {
+    //     game.gameOver("dead");
+    // }
 
     map.grid[this.col][map.colHeight[this.col]-2] = this.color[1]+1;
     map.grid[this.col][map.colHeight[this.col]-1] = this.color[0]+1;
@@ -363,7 +364,7 @@ FallingBrick.prototype.pause = function(){
 }
 
 FallingBrick.prototype.resume = function(){
-    this.speed = 1200;
+    this.speed = 1500;
 }
 
 FallingBrick.prototype.setMap = function(){
@@ -491,7 +492,7 @@ FallingBrick.prototype.setMap = function(){
 
 FallingBrick.prototype.clear = function() {
     this.display = false;
-    this.speed = 1200;
+    this.speed = 1500;
     this.x = 0;
     this.y = 0;
     this.color = [0,0];
@@ -502,7 +503,7 @@ FallingBrick.prototype.clear = function() {
 
 var Bar = function(){
     this.x = 0;
-    this.y = 0;
+    this.y = Board.MAP_OFFSET;
     this.speed = 0;
     this.sprite = "images/slidebar.png"
 }
@@ -529,7 +530,7 @@ Bar.prototype.returnToStart = function() {
     // console.log(Board.BLOCK_SIZE);
     this.speed = 100;
     this.x = 0;
-    this.y = 0;
+    this.y = Board.MAP_OFFSET;
     this.nextTarget = Board.BLOCK_SIZE/2;
 
 }
@@ -807,10 +808,10 @@ Brick.prototype.update = function(dt) {
 Brick.prototype.returnToStart = function() {
 
     // console.log(Board.BLOCK_SIZE);
-    this.speed = 50;
+    this.speed = 15;
     this.setRandomBrick();
     this.x = (Board.COL_NUM/2) * Board.BLOCK_SIZE - Board.BLOCK_SIZE;
-    this.y = -45;
+    this.y = -15;
     this.col = 7;
     this.display = true;
 
@@ -825,7 +826,7 @@ Brick.prototype.pause = function() {
 
 Brick.prototype.resume = function() {
 
-    this.speed = 50;
+    this.speed =15;
     // this.display = false;
 
 }

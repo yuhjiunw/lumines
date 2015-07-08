@@ -16,7 +16,7 @@
 
 // Define paremeters for board
 var Board = {
-    BOARD_HEIGHT: 300,
+    BOARD_HEIGHT: 360,
     BOARD_WIDTH: 480,
     BLOCK_WIDTH: 30,
     BLOCK_HEIGHT: 30,
@@ -24,7 +24,8 @@ var Board = {
     BLOCK_SIZE_SMALL: 20,
     COL_NUM: 16,
     ROW_NUM: 10,
-    BLOCK_NUM: 4
+    BLOCK_NUM: 4,
+    MAP_OFFSET: 60
 };
 
 var Engine = (function(global) {
@@ -41,10 +42,10 @@ var Engine = (function(global) {
         lastTime;
 
     canvas.width = 480;
-    canvas.height = 300;
+    canvas.height = 360;
 
     nextBrickCanvas.width = 80;
-    nextBrickCanvas.height = 300;
+    nextBrickCanvas.height = 360;
 
     doc.body.appendChild(canvas);
     doc.body.appendChild(nextBrickCanvas);
@@ -141,7 +142,7 @@ var Engine = (function(global) {
                 'images/blue_30_30.png',
                 'images/blue_30_30.png'
             ],
-            numRows = Board.ROW_NUM,
+            numRows = Board.ROW_NUM+2,
             numCols = Board.COL_NUM,
             row, col;
 
@@ -155,6 +156,8 @@ var Engine = (function(global) {
             brick.renderNextFiveBrick();
          }
 
+
+
         for (row = 0; row < numRows; row++) {
             for (col = 0; col < numCols; col++) {
                 /* The drawImage function of the canvas' context element
@@ -164,7 +167,13 @@ var Engine = (function(global) {
                  * so that we get the benefits of caching these images, since
                  * we're using them over and over.
                  */
-                if (map.grid[col][row] === 0)
+
+                if (row === 10 || row === 11)
+                {
+                    ctx.drawImage(Resources.get('images/blue_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+                }
+
+                else if (map.grid[col][row] === 0)
                 {
                     ctx.drawImage(Resources.get(rowImages[row]), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
@@ -197,11 +206,12 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
-
+        bar.render();
+        ctx.drawImage(Resources.get('images/rowbar.png'), 0,60);
         brick.render();
         leftFallingBrick.render();
         rightFallingBrick.render();
-        bar.render();
+
     }
 
     /* This function does nothing but it could have been a good place to
@@ -226,7 +236,9 @@ var Engine = (function(global) {
         'images/slidebar.png',
         'images/dark_orange_30_30.png',
         'images/dark_gray_30_30.png',
-        'images/nextbrickBG.png'
+        'images/nextbrickBG.png',
+        'images/white.png',
+        'images/rowbar.png'
     ]);
     Resources.onReady(init);
 
