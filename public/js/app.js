@@ -182,6 +182,8 @@ Map.prototype.checkBrickSameType = function(checkX, checkY){
     return false;
 }
 
+
+//return 0 or 3 or 4
 Map.prototype.checkBrickIsDarkType = function(checkX, checkY){
 
     if (checkY >= Board.ROW_NUM - 1)
@@ -190,6 +192,16 @@ Map.prototype.checkBrickIsDarkType = function(checkX, checkY){
     }
 
     if (checkX === 0)
+    {
+        return 0;
+    }
+
+    if (checkX >= Board.COL_NUM)
+    {
+        return 0;
+    }
+
+    if (checkY < 0)
     {
         return 0;
     }
@@ -209,21 +221,79 @@ Map.prototype.checkBrickIsDarkType = function(checkX, checkY){
     return 0;
 }
 
+Map.prototype.clearTypeGrid = function()
+{
+    var iMax = 16;
+    var jMax = 10;
+
+    for (i=0;i<iMax;i++) {
+
+        for (j=0;j<jMax;j++) {
+            this.typeGrid[i][j]=0;
+        }
+    }
+}
+
+
+
 Map.prototype.updateTypeGrid = function()
 {
     for (var i = Board.COL_NUM - 1; i > 0 ;i--)
     {
         for (var j = 0; j < Board.ROW_NUM - 1  ; j++)
         {
-            if ( checkBrickIsDarkType(i,j) != 0 )
+            if ( this.checkBrickIsDarkType(i,j) != 0 )
             {
-
-
+                if(this.checkBrickIsDarkType(i,j-1) != 0 && this.checkBrickIsDarkType(i+1,j) != 0)
+                {
+                    this.typeGrid[i-1][j+1]=1;
+                }
+                else if (this.checkBrickIsDarkType(i,j-1) != 0)
+                {
+                    this.typeGrid[i-1][j+1]=1;
+                    this.typeGrid[i][j+1]=4;
+                }
+                else if (this.checkBrickIsDarkType(i+1,j) != 0)
+                {
+                    this.typeGrid[i-1][j+1]=1;
+                    this.typeGrid[i-1][j]=2;
+                }
+                else if (this.checkBrickIsDarkType(i+1,j-1) != 0)
+                {
+                    this.typeGrid[i-1][j+1]=1;
+                    this.typeGrid[i][j+1]=4;
+                    this.typeGrid[i-1][j]=2;
+                }
+                else
+                {
+                    this.typeGrid[i-1][j+1]=1;
+                    this.typeGrid[i][j+1]=4;
+                    this.typeGrid[i-1][j]=2;
+                    this.typeGrid[i][j]=3;
+                }
             }
+        }
+    }
 
-
-
-
+    for (var i = Board.COL_NUM - 1; i > 0 ;i--)
+    {
+        for (var j = 0; j < Board.ROW_NUM ; j++)
+        {
+            if (this.grid[i][j] > 2 && this.typeGrid[i][j]===0)
+            {
+                if (j===0)
+                {
+                    this.typeGrid[i][j] = 3;
+                }
+                else if(this.grid[i][j]=== this.grid[i][j-1])
+                {
+                    this.typeGrid[i][j] = 4;
+                }
+                else
+                {
+                    this.typeGrid[i][j] = 3;
+                }
+            }
         }
     }
 
@@ -400,6 +470,9 @@ FallingBrick.prototype.collide = function() {
     this.x = -100;
     this.y = -100;
     // this.speed = 0;
+
+    map.clearTypeGrid();
+    map.updateTypeGrid();
 
     if(map.fallingBrickNum === 0)
     {
@@ -665,6 +738,8 @@ Bar.prototype.clearBrick = function() {
     game.updateScore(colscore);
     map.colHeight[currentCol] = fillIndex;
     bar.updateGrid(currentCol);
+    map.clearTypeGrid();
+    map.updateTypeGrid();
 }
 
 Bar.prototype.updateGrid = function (currentCol){
@@ -727,6 +802,8 @@ Bar.prototype.updateGrid = function (currentCol){
             }
         }
     }
+
+
 }
 
 

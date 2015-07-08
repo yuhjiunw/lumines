@@ -187,11 +187,56 @@ var Engine = (function(global) {
                 }
                 else if (map.grid[col][row] === 3)
                 {
-                    ctx.drawImage(Resources.get('images/dark_gray_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+
+                    var renderImage;
+                    if (map.typeGrid[col][row]===1)
+                    {
+                        renderImage = "images/dark_gray_30_30_top_left.png";
+                    }
+                    else if (map.typeGrid[col][row]===2)
+                    {
+                        renderImage = "images/dark_gray_30_30_left_bottom.png";
+                    }
+                    else if (map.typeGrid[col][row]===3)
+                    {
+                        renderImage = "images/dark_gray_30_30_right_bottom.png";
+                    }
+                    else if (map.typeGrid[col][row]===4)
+                    {
+                        renderImage = "images/dark_gray_30_30_top_right.png";
+                    }
+                    else
+                    {
+                        renderImage = "images/dark_gray_30_30.png";
+                    }
+
+                    ctx.drawImage(Resources.get(renderImage), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
                 else if (map.grid[col][row] === 4)
                 {
-                    ctx.drawImage(Resources.get('images/dark_orange_30_30.png'), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
+                    var renderImage;
+                    if (map.typeGrid[col][row]===1)
+                    {
+                        renderImage = "images/dark_orange_30_30_top_left.png";
+                    }
+                    else if (map.typeGrid[col][row]===2)
+                    {
+                        renderImage = "images/dark_orange_30_30_left_bottom.png";
+                    }
+                    else if (map.typeGrid[col][row]===3)
+                    {
+                        renderImage = "images/dark_orange_30_30_bottom_right.png";
+                    }
+                    else if (map.typeGrid[col][row]===4)
+                    {
+                        renderImage = "images/dark_orange_30_30_right_top.png";
+                    }
+                    else
+                    {
+                        renderImage = "images/dark_orange_30_30.png";
+                    }
+
+                    ctx.drawImage(Resources.get(renderImage), col * Board.BLOCK_SIZE, Board.BOARD_HEIGHT - Board.BLOCK_SIZE - row * Board.BLOCK_SIZE);
                 }
 
             }
@@ -238,7 +283,15 @@ var Engine = (function(global) {
         'images/dark_gray_30_30.png',
         'images/nextbrickBG.png',
         'images/white.png',
-        'images/rowbar.png'
+        'images/rowbar.png',
+        'images/dark_gray_30_30_left_bottom.png',
+        'images/dark_gray_30_30_right_bottom.png',
+        'images/dark_gray_30_30_top_left.png',
+        'images/dark_gray_30_30_top_right.png',
+        'images/dark_orange_30_30_left_bottom.png',
+        'images/dark_orange_30_30_bottom_right.png',
+        'images/dark_orange_30_30_top_left.png',
+        'images/dark_orange_30_30_right_top.png'
     ]);
     Resources.onReady(init);
 
