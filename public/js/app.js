@@ -1032,9 +1032,12 @@ Brick.prototype.handleInput = function(key) {
     if (this.display === true)
     {
         if (key == 'up') {
-            var tempColor = this.color.slice(1,4);
-            tempColor.push(this.color[0]);
-            this.color = tempColor;
+            if(game.pause === false)
+            {
+                var tempColor = this.color.slice(1,4);
+                tempColor.push(this.color[0]);
+                this.color = tempColor;
+            }
 
         } else if (key == 'left') {
             // Ensure brick will still be on the board and cant go left if there is brick on its left
@@ -1054,9 +1057,12 @@ Brick.prototype.handleInput = function(key) {
             this.collide();
         }
         else if (key == 'space') {
-            var tempColor = this.color.slice(0,3);
-            tempColor.unshift(this.color[3]);
-            this.color = tempColor;
+            if(game.pause === false)
+            {
+                var tempColor = this.color.slice(0,3);
+                tempColor.unshift(this.color[3]);
+                this.color = tempColor;
+            }
         }
     }
 }
