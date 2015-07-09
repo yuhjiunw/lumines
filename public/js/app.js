@@ -938,7 +938,7 @@ Brick.prototype.returnToStart = function() {
     this.speed = 15;
     this.setRandomBrick();
     this.x = (Board.COL_NUM/2) * Board.BLOCK_SIZE - Board.BLOCK_SIZE;
-    this.y = -15;
+    this.y = -30;
     this.col = 7;
     this.display = true;
 
@@ -964,13 +964,17 @@ Brick.prototype.render = function() {
 
     if (this.display === true)
     {
+
+        var renderY = Math.ceil(this.y / Board.BLOCK_SIZE) * Board.BLOCK_SIZE;
+
         for(var i = 0; i < BRICK_OFFSET.length; i++)
         {
 
+
             var currentX = this.x + BRICK_OFFSET[i][0];
-            var currentY = this.y + BRICK_OFFSET[i][1];
-            // console.log(currentX);
-            // console.log(currentY);
+            var currentY = renderY + BRICK_OFFSET[i][1];
+
+
 
             if(this.color[i] === 0)
             {
