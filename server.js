@@ -20,13 +20,25 @@ app.use(express.static('public'));
 app.set('views', './views');
 app.set('view engine', 'jade');
 
-// app.get('/', function (req, res) {
-//   res.send('Hello World!');
-// });
-
 var port = process.env.PORT || 3000;
 app.listen(port, function() {
   console.log("Listening on " + port);
+});
+
+app.get('/', function(req, res) {
+  console.log("/");
+  res.render('index', {data : null});
+});
+
+app.get('/:replay_id', function(req, res) {
+  console.log(req.params["replay_id"]);
+  res.render('index', {data : req.params["replay_id"]});
+});
+
+app.get('/replay/:id', function(req, res) {
+  var id = req.params["id"];
+  var string = encodeURIComponent(id);
+  res.redirect('/'+ id);
 });
 
 app.get('/get_replay/:id', function(req, res) {
@@ -47,7 +59,6 @@ app.get('/list', function (req, res) {
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     getDataFromDB(db, function(results) {
-      console.log(results);
       res.render('list', {data : results});
       db.close();
     });
@@ -79,7 +90,7 @@ app.get('/drop_table', function(req, res) {
 });
 
 var getJsonDataFromRequest = function(req) {
-	console.log(req.body);
+	//console.log(req.body);
 	return req.body;
 }
 

@@ -1,5 +1,3 @@
-<!DOCTYPE html>
-<html>
 <head>
     <meta charset="UTF-8">
     <title>Lumines Game</title>
@@ -26,40 +24,7 @@
     <link href='http://fonts.googleapis.com/css?family=Audiowide' rel='stylesheet' type='text/css'>
 
 </head>
-<body>
 
-  <div class="col-md-9 col-md-offset-1">
-    <p id="message" class="col-md-9" style="font-size: 250%; width: 100%; margin-top: 5px; margin-bottom: 10px"> Lumines Game </p>
-    <div class="row" style="margin-left:0px; margin-right:0px">
-      <div class="col-md-4" >
-        <p id="scoretext" style="font-size:200%;"> Current Score </p>
-        <p id="score" style="font-size:300%"> 0 </p>
-      </div>
-      <div class="col-md-4">
-        <p style="font-size:200%;"> Remaining Time </p>
-        <p id="time" style="font-size:300%"> 90 </p>
-      </div>
-      <div class="col-md-4">
-        <button id="start_button" class="btn btn-primary" style="width: 100%;">Start Game</button>
-        <button id="pause_button" class="btn btn-primary" style="width: 100%"> Pause</button>
-        <button id="replay_button" class="btn btn-primary" style="width: 100%"> Replay </button>
-        <input type="text" class="form-control text-centered" id="player_name" placeholder="Please Enter Your Name" style="width: 100%" />
-        <input type="text" class="form-control text-centered" id="replay_id" />
-      </div>
-
-    </div>
-  </div>
-  <div class="wrapper row" style="margin-top: 3%; margin-left:0px; margin-right:0px">
-    <div id="game-arena" class="center" style="float: left; margin-left: 20%"> </div>
-    <div id="scoreboard" style="width: 350px; height: 360px; float: left; margin-bottom: 0px"> </div>
-  </div>
-  <!-- <p> Control: Arrow keys and space. Only support Chrome and Firefox.</p> -->
-  <!-- <div> <a href="javascript:fbShare('http://lumines.herokuapp.com/', 'Fb Share', 'Facebook share popup', 'http://goo.gl/dS52U', 520, 350)">Share</a>  </div>
- -->
-
-
-
-</body>
 <script>
   (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -76,5 +41,3 @@
     $("#scoreboard").html('<object data="/list"/>');
   });
 </script>
-<script src="js/engine.js"></script>
-</html>

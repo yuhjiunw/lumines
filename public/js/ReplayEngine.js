@@ -102,26 +102,11 @@ ReplayEngine.prototype.resume = function(startTime) {
 	this.timeoffset = startTime;
 }
 
-$(document).ready(function() {
-	$("#replay_button").click(function() {
-		if (replayEngine.replayMode === true) {
-			replayEngine.replayMode = false;
-			// pause game
-		} else {
-			var replay_id = $("#replay_id").val();
-			console.log("replay_id = " + replay_id);
-			replayEngine.replayMode = true;
-			get_replay_data(replay_id, function(res) {
-				// this is the data saved in DB.
-				console.log(res);
+// $(document).ready(function() {
+// 	$("#replay_button").click(function() {
 
-				replayEngine.unzip(res[0]["replay"]);
-				game.restart();
-
-			});
-		}
-	});
-});
+// 	});
+// });
 
 var get_replay_data = function(id, callback) {
     console.log("get replay data");
@@ -129,3 +114,4 @@ var get_replay_data = function(id, callback) {
         callback(responseText);
     });
 }
+
