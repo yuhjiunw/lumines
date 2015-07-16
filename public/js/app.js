@@ -43,6 +43,7 @@ var Game = function()
     this.score = 0;
     this.pause = false;
     this.pausetime = 0;
+    this.startTime = 0;
 }
 
 Game.prototype.pausefunc = function()
@@ -51,6 +52,8 @@ Game.prototype.pausefunc = function()
     leftFallingBrick.pause();
     rightFallingBrick.pause();
     bar.pause();
+    replayEngine.pause();
+    this.pausetime = Date.now();
 }
 
 Game.prototype.resume = function()
@@ -59,6 +62,11 @@ Game.prototype.resume = function()
     leftFallingBrick.resume();
     rightFallingBrick.resume();
     bar.resume();
+    
+    var t = Date.now() - this.pausetime;
+    this.startTime += t;
+
+    replayEngine.resume(this.startTime);
 }
 
 Game.prototype.gameOver = function(type)
@@ -77,7 +85,12 @@ Game.prototype.gameOver = function(type)
     clearInterval(game.timerID);
     this.status = false;
 
-    save_to_db(game.score, $('#player_name').val());
+    console.log(replayEngine.getLog());
+    replayEngine.saveKeysToDB();
+
+    save_to_db(game.score, $('#player_name').val(), replayEngine.toString());
+
+    replayEngine.reset();    
     $('#start_button').focus();
 
     // bar.pause();
@@ -88,6 +101,7 @@ Game.prototype.restart = function()
 {
     $('#start_button').blur();
     clearInterval(game.timerID);
+
     brick.setRandomFive();
     this.renderNextFive = true;
 
@@ -99,6 +113,8 @@ Game.prototype.restart = function()
     this.score = 0;
     this.pause = false;
     game.status = true;
+    this.startTime = Date.now();
+    replayEngine.start();
 }
 
 Game.prototype.updateScore = function(colscore)
@@ -893,7 +909,12 @@ Brick.prototype.renderNext = function(colorArray, x, y) {
 
 Brick.prototype.setRandomBrick = function() {
 
-    this.color = this.nextFive[0];
+    if (replayEngine.replayMode === true) {
+        this.color = replayEngine.getNextColor();
+    } else {
+        this.color = this.nextFive[0];
+    }
+    
     this.nextFive.shift();
 
     var newbrick = [0,0,0,0];
@@ -1033,6 +1054,10 @@ Brick.prototype.collide = function() {
 
 Brick.prototype.handleInput = function(key) {
 
+    if (this.display === true && game.pause === false && replayEngine.replayMode === false) {
+        replayEngine.record(key, brick.color, Date.now());
+    }
+
     if (this.display === true)
     {
         if (key == 'up') {
@@ -1059,13 +1084,20 @@ Brick.prototype.handleInput = function(key) {
             }
         } else if (key == 'down') {
             this.collide();
-        }
-        else if (key == 'space') {
+        } else if (key == 'space') {
             if(game.pause === false)
             {
                 var tempColor = this.color.slice(0,3);
                 tempColor.unshift(this.color[3]);
                 this.color = tempColor;
+            }
+        } else if (key == 'pause') {
+            if (game.pause === false) {
+                game.pausefunc();                
+            }
+        } else if (key === 'resume') {
+            if (game.pause === true) {
+                game.resume();
             }
         }
     }
@@ -1081,7 +1113,7 @@ var brick = new Brick();
 var leftFallingBrick = new FallingBrick();
 var rightFallingBrick = new FallingBrick();
 var bar = new Bar();
-
+var replayEngine = new ReplayEngine();
 
 $(document).ready(function() {
   $('#start_button').click(function() {
@@ -1166,10 +1198,10 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
     }
 // Database
 
-var save_to_db = function(score, name) {
+var save_to_db = function(score, name, replay) {
     console.log("save_to_db: " + score + "  " + name);
     console.log(window.location.host + "/save");
     xmlhttp.open("POST", location.protocol + "//" + window.location.host + "/save", true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send("score=" + score + "&name=" + name);
+    xmlhttp.send("score=" + score + "&name=" + name + "&replay=" + replay);
 }

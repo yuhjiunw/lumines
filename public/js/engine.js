@@ -68,6 +68,18 @@ var Engine = (function(global) {
          */
         if(game.status === true)
         {
+            if (replayEngine.replayMode === true) {
+                var t = Date.now() - game.startTime;
+                console.log("retrieve key at: " + t);
+                var key = replayEngine.getNextKeys(t);
+                if (key != -1) {
+                    console.log(key);
+                    for (var i = 0 ; i < key.length ; ++i) {
+                        brick.handleInput(key[i]["key"]);
+                    }
+                }
+            }
+
             update(dt);
             render();
         }

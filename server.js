@@ -29,6 +29,20 @@ app.listen(port, function() {
   console.log("Listening on " + port);
 });
 
+app.get('/get_replay/:id', function(req, res) {
+  var id = req.params["id"];
+  console.log("replay_id = " + id);
+  MongoClient.connect(url, function(err, db) {
+    assert.equal(null, err);
+    console.log("!!");
+    getOneDataFromDB(db, id, function(result) {
+      console.log(result);
+      res.json(result);
+      db.close();
+    });
+  });
+});
+
 app.get('/list', function (req, res) {
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
@@ -47,8 +61,10 @@ app.post('/save', function(req, res) {
   json_data.score-=[]; // string to int, if int then nothing hapen
 	MongoClient.connect(url, function(err, db) {
 	  assert.equal(null, err);
-	  insertDocument(db, json_data, function() {
-	      db.close();
+	  insertDocument(db, json_data, function(docsInserted) {
+      console.log("save doc into " + docsInserted);
+      res.json({"id":docsInserted})
+	    db.close();
 	  });
 	});
 });
@@ -73,7 +89,6 @@ var insertDocument = function(db, data, callback) {
    	data // json object
    	, function(err, result) {
     assert.equal(err, null);
-    console.log("Inserted a document into the restaurants collection.");
     callback(result);
   });
 };
@@ -85,3 +100,16 @@ var getDataFromDB = function(db, callback) {
     callback(doc.slice(0, 10));
   });
 };
+
+var getOneDataFromDB = function(db, id, callback) {
+  var ObjectId = require('mongodb').ObjectID;
+  console.log("getOneDataFromDB");
+  var cursor =db.collection('lumines_scores').find(
+  {
+    "_id": new ObjectId(id)
+  });
+  cursor.toArray(function(err, doc) {
+    assert.equal(err, null);
+    callback(doc);
+  });
+}
