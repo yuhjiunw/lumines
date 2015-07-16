@@ -88,7 +88,9 @@ Game.prototype.gameOver = function(type)
     console.log(replayEngine.getLog());
     replayEngine.saveKeysToDB();
 
-    save_to_db(game.score, $('#player_name').val(), replayEngine.toString());
+    if (replayEngine.replayMode === false) {
+        save_to_db(game.score, $('#player_name').val(), replayEngine.toString());        
+    }
 
     replayEngine.reset();    
     $('#start_button').focus();
