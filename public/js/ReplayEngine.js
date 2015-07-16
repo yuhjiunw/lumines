@@ -73,8 +73,6 @@ ReplayEngine.prototype.getLog = function() {
 }
 
 ReplayEngine.prototype.getNextKeys = function(dt){
-	console.log("getNextKeys");
-	console.log(this.keys);
 	if (this.keys === null || this.keys.length == 0 || dt >= 180000) {
 		return -1;
 	} else {		
@@ -83,7 +81,6 @@ ReplayEngine.prototype.getNextKeys = function(dt){
 		for (index = 0 ; index < this.keys.length ; index++) {
 			if (dt > this.keys[0]["time"] ) {
 				next.push(this.keys[index]);
-				console.log(next);
 				break;
 			}
 		}
