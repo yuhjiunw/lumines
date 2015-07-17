@@ -7,6 +7,10 @@ html
     a(href="images/blue_30_30.png" class="fancybox" title="Sample title") 
       img(class="fancybox" src="images/blue_30_30.png")
     a(href="#example" class="fancybox") Example
+  
+
+  div(id="example")
+    p Test Test Test
   script.
     $(document).ready(function() {
         $('.fancybox').fancybox({
@@ -14,3 +18,4 @@ html
             openEffect  : 'elastic'
         });
     });
+

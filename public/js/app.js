@@ -88,12 +88,19 @@ Game.prototype.gameOver = function(type)
     console.log(replayEngine.getLog());
     replayEngine.saveKeysToDB();
 
+    var t = Date.now();
     if (replayEngine.replayMode === false) {
-        save_to_db(game.score, $('#player_name').val(), replayEngine.toString());        
+        save_to_db(game.score, $('#player_name').val(), replayEngine.toString(), t);        
     }
 
     replayEngine.reset();    
     $('#start_button').focus();
+
+    $(document).ready(function() {
+        $("#content").text("Score: " + game.score);
+        $("#share_link").val("http://lumines.herokuapp/" + t);
+        $("#test").trigger('click');
+    });
 
     // bar.pause();
     // brick.pause();
@@ -1191,6 +1198,8 @@ document.addEventListener('keyup', function(e) {
 });
 
 
+
+
 //facebook
 
 function fbShare(url, title, descr, image, winWidth, winHeight) {
@@ -1200,10 +1209,13 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
     }
 // Database
 
-var save_to_db = function(score, name, replay) {
+var save_to_db = function(score, name, replay, time) {
     console.log("save_to_db: " + score + "  " + name);
     console.log(window.location.host + "/save");
     xmlhttp.open("POST", location.protocol + "//" + window.location.host + "/save", true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send("score=" + score + "&name=" + name + "&replay=" + replay);
+    xmlhttp.send("score=" + score + "&name=" + name + "&replay=" + replay + "&t=" + time);
 }
+
+// fancybox
+

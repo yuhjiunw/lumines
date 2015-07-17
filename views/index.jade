@@ -13,13 +13,26 @@ html
       div(class="col-md-4")
         button(id="start_button" class="btn btn-primary" style="width: 100%;") Start Game
         button(id="pause_button" class="btn btn-primary" style="width: 100%") Pause
-  div(class="wrapper row" style="margin-top: 3%; margin-left:0px; margin-right:0px")
-    p(id="replay_id")!= data
-    div(id="game-arena" class="center" style="float: left; margin-left: 20%")
-    //div(id="scoreboard" style="width: 350px; height: 360px; float: left; margin-bottom: 0px")
+    div(class="wrapper row" style="margin-top: 3%; margin-left:0px; margin-right:0px")
+      p(id="replay_id")!= data
+      div(id="game-arena" class="center" style="float: left; margin-left: 20%")
+      //div(id="scoreboard" style="width: 350px; height: 360px; float: left; margin-bottom: 0px")
+    a(id="test" href="#example" class="fancybox") Example
+  
+  div(id="example")
+    p(id="content")
+    input(id="share_link")
+
   script(src="js/engine.js")
+
   script.
-    console.log($("#replay_id"));
+    $(document).ready(function() {
+        $('.fancybox').fancybox({
+            padding : 0,
+            openEffect  : 'elastic'
+        });
+    });
+  script.
     if ( $("#replay_id").text().length >= 12) {
       if (replayEngine.replayMode === true) {
         replayEngine.replayMode = false;

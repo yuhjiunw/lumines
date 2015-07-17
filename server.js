@@ -45,7 +45,6 @@ app.get('/get_replay/:id', function(req, res) {
   console.log("replay_id = " + id);
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
-    console.log("!!");
     getOneDataFromDB(db, id, function(result) {
       console.log(result);
       res.json(result);
@@ -116,7 +115,7 @@ var getOneDataFromDB = function(db, id, callback) {
   console.log("getOneDataFromDB");
   var cursor =db.collection('lumines_scores').find(
   {
-    "_id": new ObjectId(id)
+    "t": id
   });
   cursor.toArray(function(err, doc) {
     assert.equal(err, null);
