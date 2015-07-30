@@ -111,7 +111,7 @@ Game.prototype.gameOver = function(type)
         $("#test").trigger('click');
     });
     //replayEngine.reset();    
-    $('#start_button').focus();
+    $('#fancy_restart').focus();
     // bar.pause();
     // brick.pause();
 }
@@ -1153,6 +1153,25 @@ $(document).ready(function() {
     // bar.returnToStart();
 
   });
+});
+
+$(document).ready(function() {
+    $('#fancy_restart').click(function() {
+        parent.$.fancybox.close();
+
+        // (TODO) Duplicate codes!!!!
+        game.restart();
+
+        $('#start_button').html("Restart");
+        $('#pause_button').html("Pause");
+        $('#time').html("90");
+
+        jQuery(function ($) {
+        var fiveMinutes = 89,
+            display = $('#time');
+        startTimer(fiveMinutes, display);
+        });
+    });
 });
 
 $(document).ready(function() {

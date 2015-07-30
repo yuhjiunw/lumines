@@ -23,15 +23,17 @@ html
     p(id="content" class="text-center" style="font-size: 200%")
     p(id="statistics_text" class="text-left")
     input(class="form-control" id="share_link" style="width: 100%")
-
+    br
+    button(id="fancy_restart" class="btn btn-primary") Play Again
+    include advertisement.html
 
   script(src="js/engine.js")
 
   script.
     $(document).ready(function() {
         $('.fancybox').fancybox({
-            'width' : 480,
-            'height' : 360,
+            'width' : 800,
+            'height' : 420,
             padding : 0,
             openEffect  : 'elastic',
             'autoSize' : false
