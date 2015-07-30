@@ -30,15 +30,14 @@ app.get('/', function(req, res) {
   res.render('index', {data : null});
 });
 
-app.get('/:replay_id', function(req, res) {
-  console.log(req.params["replay_id"]);
-  res.render('index', {data : req.params["replay_id"]});
+app.get('/test', function(req, res) {
+  res.render('test');
 });
 
 app.get('/replay/:id', function(req, res) {
   var id = req.params["id"];
   var string = encodeURIComponent(id);
-  res.redirect('/'+ id);
+  res.render('replay', {data : req.params["replay_id"]});
 });
 
 app.get('/get_replay/:id', function(req, res) {
@@ -46,7 +45,6 @@ app.get('/get_replay/:id', function(req, res) {
   console.log("replay_id = " + id);
   MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
-    console.log("!!");
     getOneDataFromDB(db, id, function(result) {
       console.log(result);
       res.json(result);
@@ -117,7 +115,7 @@ var getOneDataFromDB = function(db, id, callback) {
   console.log("getOneDataFromDB");
   var cursor =db.collection('lumines_scores').find(
   {
-    "_id": new ObjectId(id)
+    "t": id
   });
   cursor.toArray(function(err, doc) {
     assert.equal(err, null);

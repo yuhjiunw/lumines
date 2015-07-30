@@ -3,13 +3,39 @@ var keymap = {"up":1, "down":2, "left": 3, "right": 4, "space":5, "pause":6,
 							"1":"up", "2":"down", "3":"left", "4":"right", "5":"space", "6":"pause"};
 
 var ReplayEngine = function() {
+	this.init();
+}
+
+ReplayEngine.prototype.init = function() {
+
 	this.keys = [];
 	this.timeoffset = 0;
 	this.replayMode = false;
+
+	this.leftNum = 0;
+	this.rightNum = 0;
+	this.downNum = 0;
+	this.upNum = 0;
+	this.spaceNum = 0;
 }
 
 ReplayEngine.prototype.record = function(key, color, t) {
 	this.keys.push({"key":key, "color": color, "time":(t - this.timeoffset)});
+	if (key == 'up') {
+		this.upNum++;
+	} else if (key == 'down') {
+		this.downNum++;
+	} else if (key == 'left') {
+		this.leftNum++;
+	} else if (key == 'right') {
+		this.rightNum++;
+	} else if (key == 'space') {
+		this.spaceNum++;
+	}
+}
+
+ReplayEngine.prototype.getStatistics = function() {
+	return [this.upNum, this.downNum, this.leftNum, this.rightNum, this.spaceNum];
 }
 
 ReplayEngine.prototype.saveKeysToDB = function() {
@@ -59,12 +85,14 @@ ReplayEngine.prototype.unzip = function(str) {
 
 ReplayEngine.prototype.start = function() {
 	replayMode = false;
+	this.init();
 	this.timeoffset = Date.now();
 }
 
 ReplayEngine.prototype.reset = function() {
 	console.log("init replayEngine");
 	this.keys = [];
+	this.init();
 	this.replayMode = false;
 }
 

@@ -1,5 +1,5 @@
 html
-  include index.html
+  include replay.html
   body
     div(class="col-md-9 col-md-offset-1")
       p(id="message" class="col-md-9" style="font-size: 250%; width: 100%; margin-top: 5px; margin-bottom: 10px") Lumines Game
@@ -17,26 +17,19 @@ html
       p(id="replay_id")!= data
       div(id="game-arena" class="center" style="float: left; margin-left: 20%")
       //div(id="scoreboard" style="width: 350px; height: 360px; float: left; margin-bottom: 0px")
-    a(id="test" href="#example" class="fancybox" style="font-size:0px") Example
+    a(id="test" href="#example" class="fancybox") Example
   
-  div(id="example" style="display:none")
-    p(id="content" class="text-center" style="font-size: 200%")
-    p(id="statistics_text" class="text-left")
-    input(class="form-control" id="share_link" style="width: 100%")
-    br
-    button(id="fancy_restart" class="btn btn-primary") Play Again
-    include advertisement.html
+  div(id="example" style="width: 40%")
+    p(id="content")
+    input(id="share_link")
 
-  script(src="js/engine.js")
+  script(src="../js/engine.js")
 
   script.
     $(document).ready(function() {
         $('.fancybox').fancybox({
-            'width' : 800,
-            'height' : 420,
             padding : 0,
-            openEffect  : 'elastic',
-            'autoSize' : false
+            openEffect  : 'elastic'
         });
     });
   script.

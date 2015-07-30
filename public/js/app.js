@@ -73,6 +73,7 @@ Game.prototype.gameOver = function(type)
 {
 
     console.log("game over");
+    stat = replayEngine.getStatistics();
 
     if (type === "dead")
     {
@@ -88,13 +89,29 @@ Game.prototype.gameOver = function(type)
     console.log(replayEngine.getLog());
     replayEngine.saveKeysToDB();
 
+    var t = Date.now();
     if (replayEngine.replayMode === false) {
-        save_to_db(game.score, $('#player_name').val(), replayEngine.toString());        
+        save_to_db(game.score, $('#player_name').val(), replayEngine.toString(), t);        
     }
 
-    replayEngine.reset();    
-    $('#start_button').focus();
+    $(document).ready(function() {
+        $("#content").html(
+            ((type === "dead")? "Game Over" : "Times Up!") + "<br />" + 
+            "Score: " + game.score
+            );
+        $("#share_link").val("http://lumines.herokuapp/" + t);
+        $("#statistics_text").html(
+            "Total Bricks: " + stat[1] + "<br />" +
+            (game.score / stat[1]).toFixed(4)  + " bricks per point<br />" +
+            "Total Actions: " + (stat[0] + stat[1] + stat[2] + stat[3] + stat[4]) + "<br />" +
+            (game.score / (stat[0] + stat[1] + stat[2] + stat[3] + stat[4])).toFixed(4)  + " actions per point" + "<br />" +
+            ((stat[0] + stat[1] + stat[2] + stat[3] + stat[4]) / (90 - $("#time").text())).toFixed(4) + " actions per second"
+            );
 
+        $("#test").trigger('click');
+    });
+    //replayEngine.reset();    
+    $('#fancy_restart').focus();
     // bar.pause();
     // brick.pause();
 }
@@ -1139,6 +1156,25 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
+    $('#fancy_restart').click(function() {
+        parent.$.fancybox.close();
+
+        // (TODO) Duplicate codes!!!!
+        game.restart();
+
+        $('#start_button').html("Restart");
+        $('#pause_button').html("Pause");
+        $('#time').html("90");
+
+        jQuery(function ($) {
+        var fiveMinutes = 89,
+            display = $('#time');
+        startTimer(fiveMinutes, display);
+        });
+    });
+});
+
+$(document).ready(function() {
   $('#pause_button').click(function() {
 
     if(game.status)
@@ -1191,6 +1227,8 @@ document.addEventListener('keyup', function(e) {
 });
 
 
+
+
 //facebook
 
 function fbShare(url, title, descr, image, winWidth, winHeight) {
@@ -1200,10 +1238,13 @@ function fbShare(url, title, descr, image, winWidth, winHeight) {
     }
 // Database
 
-var save_to_db = function(score, name, replay) {
+var save_to_db = function(score, name, replay, time) {
     console.log("save_to_db: " + score + "  " + name);
     console.log(window.location.host + "/save");
     xmlhttp.open("POST", location.protocol + "//" + window.location.host + "/save", true);
     xmlhttp.setRequestHeader("Content-type","application/x-www-form-urlencoded");
-    xmlhttp.send("score=" + score + "&name=" + name + "&replay=" + replay);
+    xmlhttp.send("score=" + score + "&name=" + name + "&replay=" + replay + "&t=" + time);
 }
+
+// fancybox
+

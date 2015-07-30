@@ -41,6 +41,8 @@ var Engine = (function(global) {
         ctx2 = nextBrickCanvas.getContext('2d'),
         lastTime;
 
+    var blue_image_path = ""
+
     canvas.width = 480;
     canvas.height = 360;
 
