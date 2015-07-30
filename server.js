@@ -37,7 +37,7 @@ app.get('/test', function(req, res) {
 app.get('/replay/:id', function(req, res) {
   var id = req.params["id"];
   var string = encodeURIComponent(id);
-  res.render('index', {data : req.params["replay_id"]});
+  res.render('replay', {data : req.params["replay_id"]});
 });
 
 app.get('/get_replay/:id', function(req, res) {

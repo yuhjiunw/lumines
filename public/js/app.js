@@ -73,6 +73,7 @@ Game.prototype.gameOver = function(type)
 {
 
     console.log("game over");
+    stat = replayEngine.getStatistics();
 
     if (type === "dead")
     {
@@ -93,15 +94,24 @@ Game.prototype.gameOver = function(type)
         save_to_db(game.score, $('#player_name').val(), replayEngine.toString(), t);        
     }
 
-    replayEngine.reset();    
-    $('#start_button').focus();
-
     $(document).ready(function() {
-        $("#content").text("Score: " + game.score);
+        $("#content").html(
+            ((type === "dead")? "Game Over" : "Times Up!") + "<br />" + 
+            "Score: " + game.score
+            );
         $("#share_link").val("http://lumines.herokuapp/" + t);
+        $("#statistics_text").html(
+            "Total Bricks: " + stat[1] + "<br />" +
+            (game.score / stat[1]).toFixed(4)  + " bricks per point<br />" +
+            "Total Actions: " + (stat[0] + stat[1] + stat[2] + stat[3] + stat[4]) + "<br />" +
+            (game.score / (stat[0] + stat[1] + stat[2] + stat[3] + stat[4])).toFixed(4)  + " actions per point" + "<br />" +
+            ((stat[0] + stat[1] + stat[2] + stat[3] + stat[4]) / (90 - $("#time").text())).toFixed(4) + " actions per second"
+            );
+
         $("#test").trigger('click');
     });
-
+    //replayEngine.reset();    
+    $('#start_button').focus();
     // bar.pause();
     // brick.pause();
 }
