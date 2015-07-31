@@ -67,6 +67,8 @@ Game.prototype.resume = function()
     this.startTime += t;
 
     replayEngine.resume(this.startTime);
+
+    $('#pause_button').blur();
 }
 
 Game.prototype.gameOver = function(type)
@@ -1089,17 +1091,20 @@ Brick.prototype.handleInput = function(key) {
 
         } else if (key == 'left') {
             // Ensure brick will still be on the board and cant go left if there is brick on its left
-            if (map.colHeight[this.col-1] * Board.BLOCK_SIZE + this.y < Board.BOARD_HEIGHT - 2 * Board.BLOCK_SIZE && (this.x - Board.BLOCK_WIDTH >= 0))
-            {
-                    this.x = this.x - Board.BLOCK_WIDTH;
-                    this.col = this.col - 1;
+            if (game.pause === false) {
+                if (map.colHeight[this.col-1] * Board.BLOCK_SIZE + this.y < Board.BOARD_HEIGHT - 2 * Board.BLOCK_SIZE && (this.x - Board.BLOCK_WIDTH >= 0))
+                {
+                        this.x = this.x - Board.BLOCK_WIDTH;
+                        this.col = this.col - 1;
+                }
             }
-
         } else if (key == 'right') {
             // Ensure brick will still be on the board and cant go right if there is brick on its right
-            if (map.colHeight[this.col+2] * Board.BLOCK_SIZE + this.y < Board.BOARD_HEIGHT - 2 * Board.BLOCK_SIZE &&(this.x + 2*Board.BLOCK_WIDTH < Board.BOARD_WIDTH)) {
-                this.x = this.x + Board.BLOCK_WIDTH;
-                this.col = this.col + 1;
+            if (game.pause === false) {
+                if (map.colHeight[this.col+2] * Board.BLOCK_SIZE + this.y < Board.BOARD_HEIGHT - 2 * Board.BLOCK_SIZE &&(this.x + 2*Board.BLOCK_WIDTH < Board.BOARD_WIDTH)) {
+                    this.x = this.x + Board.BLOCK_WIDTH;
+                    this.col = this.col + 1;
+                }
             }
         } else if (key == 'down') {
             this.collide();
