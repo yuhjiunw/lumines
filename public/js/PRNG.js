@@ -32,8 +32,6 @@ PRNG.prototype.next = function() {
 	(getBit(this.state2, 18)) ^ (getBit(this.state2, 12)) ^ (getBit(this.state2, 8)) ^
 	(getBit(this.state2, 6)) ^ (getBit(this.state2, 5)) ^ (getBit(this.state2, 4));
 
-	console.log(feedback);
-
 	var a1 = (this.FB >> this.f4(getBit(this.state1, 14), getBit(this.state1, 12), getBit(this.state1, 10), getBit(this.state, 32))) & 0x1;
 	var b2 = (this.FA >> this.f4(getBit(this.state1, 6), getBit(this.state1, 4), getBit(this.state1, 2), getBit(this.state, 24))) & 0x1;
 	var b3 = (this.FB >> this.f4(getBit(this.state2, 22), getBit(this.state2, 20), getBit(this.state2, 18), getBit(this.state, 16))) & 0x1;
@@ -43,8 +41,6 @@ PRNG.prototype.next = function() {
 
 	this.state1 = (this.state1 << 1) | ((this.state2 >> 31) & 0x1);
 	this.state2 = (this.state2 << 1) | feedback;
-
-	console.log(decimalToHexString(this.state1) + " " + decimalToHexString(this.state2));
 
 	return ret;
 };
