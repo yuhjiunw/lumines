@@ -119,7 +119,11 @@ Game.prototype.gameOver = function(type)
 Game.prototype.restart = function()
 {
     $('#start_button').blur();
+
+    rand.init(Date.now(), Date.now());
+
     clearInterval(game.timerID);
+
 
     brick.setRandomFive();
     this.renderNextFive = true;
@@ -939,7 +943,7 @@ Brick.prototype.setRandomBrick = function() {
     var newbrick = [0,0,0,0];
     for(var i = 0; i < Board.BLOCK_NUM; i++)
     {
-        if(Math.random() > 0.5)
+        if(rand.next() == 1)
         {
             newbrick[i] = 1;
         }
@@ -1133,6 +1137,7 @@ var leftFallingBrick = new FallingBrick();
 var rightFallingBrick = new FallingBrick();
 var bar = new Bar();
 var replayEngine = new ReplayEngine();
+var rand = new PRNG();
 
 $(document).ready(function() {
   $('#start_button').click(function() {
